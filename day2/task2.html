@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Temperature Converter</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background: #fff;
+      padding: 30px 40px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      text-align: center;
+    }
+
+    h2 {
+      color: #ff5722;
+      margin-bottom: 20px;
+    }
+
+    button {
+      background-color: #ff5722;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #e64a19;
+    }
+
+    p {
+      margin-top: 20px;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>Temperature Converter</h2>
+    <button onclick="convertTemperature()">Convert Celsius to Fahrenheit</button>
+    <p>Check the console to see the result.</p>
+  </div>
+
+  <script>
+    function convertTemperature() {
+      // Store temperature in Celsius
+      let celsius = parseFloat(prompt("Enter temperature in Celsius:"));
+
+      // Convert to Fahrenheit
+      let fahrenheit = (celsius * 9/5) + 32;
+
+      // Display result in console
+      console.log(celsius + "°C = " + fahrenheit.toFixed(2) + "°F");
+      alert("Temperature conversion done! Open console to see the result.");
+    }
+  </script>
+
+</body>
+</html>

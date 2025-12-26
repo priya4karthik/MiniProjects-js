@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Online Food Ordering System</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(to right, #ff6a00, #ee0979);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .container {
+      background: #fff;
+      width: 420px;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+    }
+
+    h2 {
+      text-align: center;
+      color: #ff6a00;
+      margin-bottom: 20px;
+    }
+
+    .order-details p {
+      margin: 8px 0;
+      font-size: 16px;
+    }
+
+    .status {
+      font-weight: bold;
+      color: red;
+    }
+
+    .status.delivered {
+      color: green;
+    }
+
+    .buttons {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    button {
+      background: #ff6a00;
+      border: none;
+      color: white;
+      padding: 10px 15px;
+      margin: 5px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #ee0979;
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    <h2>🍔 Order Summary</h2>
+
+    <div id="output" class="order-details"></div>
+
+    <div class="buttons">
+      <button onclick="addItem()">Add Item</button>
+      <button onclick="removeItem()">Remove Item</button>
+      <button onclick="deliverOrder()">Mark Delivered</button>
+    </div>
+  </div>
+
+  <script>
+    let order = {
+      restaurantName: "Food Palace",
+      orderNumber: 202,
+      items: ["Burger", "Pizza"],
+      totalPrice: 350,
+      isDelivered: false
+    };
+
+    function displayOrder() {
+      document.getElementById("output").innerHTML = `
+        <p><strong>Restaurant:</strong> ${order.restaurantName}</p>
+        <p><strong>Order Number:</strong> ${order.orderNumber}</p>
+        <p><strong>Items:</strong> ${order.items.join(", ")}</p>
+        <p><strong>Total Price:</strong> ₹${order.totalPrice}</p>
+        <p><strong>Status:</strong> 
+          <span class="status ${order.isDelivered ? "delivered" : ""}">
+            ${order.isDelivered ? "Delivered" : "Pending"}
+          </span>
+        </p>
+      `;
+    }
+
+    function addItem() {
+      order.items.push("Pasta");
+      order.totalPrice += 120;
+      displayOrder();
+    }
+
+    function removeItem() {
+      order.items.pop();
+      order.totalPrice -= 100;
+      displayOrder();
+    }
+
+    function deliverOrder() {
+      order.isDelivered = true;
+      displayOrder();
+    }
+
+    displayOrder();
+  </script>
+
+</body>
+</html>

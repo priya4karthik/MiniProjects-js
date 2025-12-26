@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Simple Interest Calculator</title>
+</head>
+<body>
+
+  <script>
+    // Get user input
+    let principal = parseFloat(prompt("Enter Principal Amount (P):"));
+    let rate = parseFloat(prompt("Enter Rate of Interest (R) in %:"));
+    let time = parseFloat(prompt("Enter Time Period (T) in years:"));
+
+    // Calculate simple interest
+    let SI = (principal * rate * time) / 100;
+
+    // Total amount payable
+    let totalAmount = principal + SI;
+
+    // Display output using alert
+    alert(
+      "Simple Interest: ₹" + SI.toFixed(2) + "\n" +
+      "Total Amount Payable: ₹" + totalAmount.toFixed(2)
+    );
+  </script>
+
+</body>
+</html>

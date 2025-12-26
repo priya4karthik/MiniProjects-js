@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Discount Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background: #fff;
+      padding: 30px 40px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      text-align: center;
+      width: 350px;
+    }
+
+    h2 {
+      color: #ff5722;
+      margin-bottom: 20px;
+    }
+
+    .result {
+      margin-top: 20px;
+      background: #f9f9f9;
+      padding: 15px;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      color: #333;
+      text-align: left;
+    }
+
+    button {
+      background-color: #ff5722;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #e64a19;
+    }
+
+    p {
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>Discount Calculator</h2>
+    <button onclick="calculateDiscount()">Calculate Discount</button>
+
+    <div class="result" id="result">
+      <!-- Discount result will appear here -->
+    </div>
+  </div>
+
+  <script>
+    // Predefined data
+    let originalPrice = 1500; // in ₹
+    let discountPercent = 20; // in %
+
+    function calculateDiscount() {
+      // Calculate discount amount and final price
+      let discountAmount = (originalPrice * discountPercent) / 100;
+      let finalPrice = originalPrice - discountAmount;
+
+      // Display results on webpage
+      document.getElementById("result").innerHTML = `
+        <strong>Original Price:</strong> ₹${originalPrice.toFixed(2)}<br>
+        <strong>Discount Percent:</strong> ${discountPercent}%<br>
+        <strong>Discount Amount:</strong> ₹${discountAmount.toFixed(2)}<br>
+        <strong>Final Price:</strong> ₹${finalPrice.toFixed(2)}
+      `;
+    }
+  </script>
+
+</body>
+</html>

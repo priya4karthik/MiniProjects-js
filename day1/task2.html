@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Online Quiz System</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to right, #1d976c, #93f9b9);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .quiz-box {
+      background: #fff;
+      width: 500px;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 15px 25px rgba(0,0,0,0.2);
+    }
+
+    h2 {
+      text-align: center;
+      color: #1d976c;
+    }
+
+    .question {
+      font-size: 18px;
+      margin-bottom: 15px;
+    }
+
+    .options label {
+      display: block;
+      margin: 8px 0;
+      cursor: pointer;
+    }
+
+    button {
+      margin-top: 15px;
+      padding: 10px;
+      width: 100%;
+      border: none;
+      background: #1d976c;
+      color: white;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #148f5b;
+    }
+
+    .result {
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    .correct {
+      color: green;
+    }
+
+    .wrong {
+      color: red;
+    }
+
+    .score {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 18px;
+      color: #333;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="quiz-box">
+    <h2>📝 Online Quiz</h2>
+
+    <div id="quiz"></div>
+    <button onclick="submitAnswer()">Submit Answer</button>
+
+    <div id="result" class="result"></div>
+    <div id="score" class="score"></div>
+  </div>
+
+  <script>
+    // Quiz data (multiple questions)
+    const quizData = [
+      {
+        question: "Which language is used for web development?",
+        options: ["Python", "JavaScript", "C++", "Java"],
+        correctAnswer: "JavaScript"
+      },
+      {
+        question: "HTML stands for?",
+        options: [
+          "Hyper Text Markup Language",
+          "High Text Machine Language",
+          "Hyperlinks and Text Markup Language",
+          "Home Tool Markup Language"
+        ],
+        correctAnswer: "Hyper Text Markup Language"
+      }
+    ];
+
+    let currentQuestion = 0;
+    let score = 0;
+
+    function loadQuiz() {
+      const quiz = quizData[currentQuestion];
+      let optionsHTML = "";
+
+      quiz.options.forEach(option => {
+        optionsHTML += `
+          <label>
+            <input type="radio" name="answer" value="${option}">
+            ${option}
+          </label>
+        `;
+      });
+
+      document.getElementById("quiz").innerHTML = `
+        <div class="question">${quiz.question}</div>
+        <div class="options">${optionsHTML}</div>
+      `;
+
+      document.getElementById("result").innerHTML = "";
+    }
+
+    function submitAnswer() {
+      const selected = document.querySelector('input[name="answer"]:checked');
+
+      if (!selected) {
+        alert("Please select an answer!");
+        return;
+      }
+
+      const userAnswer = selected.value;
+      const correctAnswer = quizData[currentQuestion].correctAnswer;
+      const isCorrect = userAnswer === correctAnswer;
+
+      if (isCorrect) score++;
+
+      document.getElementById("result").innerHTML = `
+        Your Answer: ${userAnswer} <br>
+        Correct Answer: ${correctAnswer} <br>
+        <span class="${isCorrect ? "correct" : "wrong"}">
+          ${isCorrect ? "Correct ✔" : "Wrong ✖"}
+        </span>
+      `;
+
+      currentQuestion++;
+
+      if (currentQuestion < quizData.length) {
+        setTimeout(loadQuiz, 1500);
+      } else {
+        document.getElementById("quiz").innerHTML = "";
+        document.getElementById("score").innerHTML =
+          `Final Score: ${score} / ${quizData.length}`;
+      }
+    }
+
+    loadQuiz();
+  </script>
+
+</body>
+</html>

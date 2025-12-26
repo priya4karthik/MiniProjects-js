@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Multiplication Table Generator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background: #fff;
+      padding: 30px 40px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      width: 350px;
+      text-align: center;
+    }
+
+    h2 {
+      color: #ff5722;
+      margin-bottom: 20px;
+    }
+
+    input {
+      width: 80%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+
+    button {
+      background-color: #ff5722;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background-color: #e64a19;
+    }
+
+    .result {
+      margin-top: 20px;
+      font-weight: bold;
+      font-size: 16px;
+      color: #333;
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>Multiplication Table Generator</h2>
+    <input type="number" id="numberInput" placeholder="Enter a number">
+    <br>
+    <button onclick="generateTable()">Generate Table</button>
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    function generateTable() {
+      let num = parseInt(document.getElementById("numberInput").value);
+      let resultDiv = document.getElementById("result");
+      resultDiv.innerHTML = "";
+
+      if (isNaN(num)) {
+        resultDiv.innerText = "Please enter a valid number!";
+        return;
+      }
+
+      for (let i = 1; i <= 10; i++) {
+        let line = `${num} x ${i} = ${num * i}`;
+        let p = document.createElement("p");
+        p.innerText = line;
+        resultDiv.appendChild(p);
+      }
+    }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sum of Digits Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background: #fff;
+      padding: 30px 40px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      width: 350px;
+      text-align: center;
+    }
+
+    h2 {
+      color: #009688;
+      margin-bottom: 20px;
+    }
+
+    input {
+      width: 80%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+
+    button {
+      background-color: #009688;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background-color: #00796b;
+    }
+
+    .result {
+      margin-top: 20px;
+      font-weight: bold;
+      font-size: 16px;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>Sum of Digits Calculator</h2>
+    <input type="number" id="numberInput" placeholder="Enter a positive number">
+    <br>
+    <button onclick="sumDigits()">Calculate Sum</button>
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    function sumDigits() {
+      let num = parseInt(document.getElementById("numberInput").value);
+      if (isNaN(num) || num < 0) {
+        document.getElementById("result").innerText = "Please enter a valid positive number!";
+        return;
+      }
+
+      let sum = 0;
+      let temp = num;
+
+      while (temp > 0) {
+        sum += temp % 10; // extract last digit
+        temp = Math.floor(temp / 10); // remove last digit
+      }
+
+      document.getElementById("result").innerText = `The sum of digits of ${num} is ${sum}.`;
+    }
+  </script>
+
+</body>
+</html>

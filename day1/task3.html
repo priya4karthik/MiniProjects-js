@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>E-Commerce Cart</title>
+
+  <style>
+    body {
+      font-family: Verdana, sans-serif;
+      background: #f0f2f5;
+      padding: 30px;
+    }
+
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+
+    .products, .cart {
+      max-width: 600px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: center;
+    }
+
+    th {
+      background: #007bff;
+      color: white;
+    }
+
+    button {
+      padding: 6px 10px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #0056b3;
+    }
+
+    .total {
+      text-align: right;
+      font-size: 18px;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    .clear {
+      background: #dc3545;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h2>🛒 E-Commerce Shopping Cart</h2>
+
+  <!-- Product List -->
+  <div class="products">
+    <h3>Products</h3>
+    <table>
+      <tr>
+        <th>Item</th>
+        <th>Price</th>
+        <th>Action</th>
+      </tr>
+      <tr>
+        <td>Laptop</td>
+        <td>₹45000</td>
+        <td><button onclick="addItem('Laptop', 45000)">Add</button></td>
+      </tr>
+      <tr>
+        <td>Keyboard</td>
+        <td>₹1500</td>
+        <td><button onclick="addItem('Keyboard', 1500)">Add</button></td>
+      </tr>
+      <tr>
+        <td>Mouse</td>
+        <td>₹800</td>
+        <td><button onclick="addItem('Mouse', 800)">Add</button></td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- Cart -->
+  <div class="cart">
+    <h3>Cart Items</h3>
+    <table id="cartTable">
+      <tr>
+        <th>Item</th>
+        <th>Qty</th>
+        <th>Price</th>
+        <th>Remove</th>
+      </tr>
+    </table>
+
+    <div class="total" id="total">Total: ₹0</div>
+    <button class="clear" onclick="clearCart()">Clear Cart</button>
+  </div>
+
+  <script>
+    let cart = {};
+    let total = 0;
+
+    function addItem(name, price) {
+      if (cart[name]) {
+        cart[name].qty++;
+      } else {
+        cart[name] = { price: price, qty: 1 };
+      }
+      calculateTotal();
+      displayCart();
+    }
+
+    function removeItem(name) {
+      if (cart[name].qty > 1) {
+        cart[name].qty--;
+      } else {
+        delete cart[name];
+      }
+      calculateTotal();
+      displayCart();
+    }
+
+    function calculateTotal() {
+      total = 0;
+      for (let item in cart) {
+        total += cart[item].price * cart[item].qty;
+      }
+    }
+
+    function displayCart() {
+      let table = `
+        <tr>
+          <th>Item</th>
+          <th>Qty</th>
+          <th>Price</th>
+          <th>Remove</th>
+        </tr>
+      `;
+
+      for (let item in cart) {
+        table += `
+          <tr>
+            <td>${item}</td>
+            <td>${cart[item].qty}</td>
+            <td>₹${cart[item].price * cart[item].qty}</td>
+            <td>
+              <button onclick="removeItem('${item}')">-</button>
+            </td>
+          </tr>
+        `;
+      }
+
+      document.getElementById("cartTable").innerHTML = table;
+      document.getElementById("total").innerText = "Total: ₹" + total;
+    }
+
+    function clearCart() {
+      cart = {};
+      total = 0;
+      displayCart();
+    }
+  </script>
+
+</body>
+</html>

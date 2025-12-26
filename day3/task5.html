@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Grading System</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background: #fff;
+      padding: 30px 40px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      width: 350px;
+      text-align: center;
+    }
+
+    h2 {
+      color: #3f51b5;
+      margin-bottom: 20px;
+    }
+
+    input {
+      width: 80%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+
+    button {
+      background-color: #3f51b5;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background-color: #303f9f;
+    }
+
+    .result {
+      margin-top: 20px;
+      font-weight: bold;
+      font-size: 16px;
+      color: #333;
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>Grading System</h2>
+    <input type="number" id="marksInput" placeholder="Enter your marks (0–100)">
+    <br>
+    <button onclick="checkGrade()">Check Grade</button>
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    function checkGrade() {
+      let marks = parseInt(document.getElementById("marksInput").value);
+      let grade = "";
+      let remark = "";
+
+      if (isNaN(marks) || marks < 0 || marks > 100) {
+        document.getElementById("result").innerText = "Please enter valid marks between 0 and 100.";
+        return;
+      }
+
+      if (marks >= 90) {
+        grade = "A+";
+        remark = "Excellent";
+      } else if (marks >= 80) {
+        grade = "A";
+        remark = "Good";
+      } else if (marks >= 70) {
+        grade = "B";
+        remark = "Average";
+      } else if (marks >= 60) {
+        grade = "C";
+        remark = "Poor";
+      } else {
+        grade = "F";
+        remark = "Fail";
+      }
+
+      document.getElementById("result").innerHTML = `
+        Marks: ${marks}<br>
+        Grade: ${grade}<br>
+        Remark: ${remark}
+      `;
+    }
+  </script>
+
+</body>
+</html>

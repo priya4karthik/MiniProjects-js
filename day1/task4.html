@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Online Food Ordering System</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      padding: 30px;
+    }
+
+    .container {
+      max-width: 500px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    h2 {
+      color: #ff5722;
+    }
+
+    button {
+      padding: 8px 12px;
+      margin: 8px;
+      border: none;
+      border-radius: 4px;
+      background: #ff5722;
+      color: white;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #e64a19;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>Online Food Ordering System</h2>
+    <button onclick="addItem('Ice Cream', 80)">Add Ice Cream</button>
+    <button onclick="removeItem('Coke', 50)">Remove Coke</button>
+    <button onclick="deliverOrder()">Mark Delivered</button>
+    <button onclick="displayOrder()">Print Order Summary</button>
+  </div>
+
+  <script>
+    // Predefined order
+    let order = {
+      restaurantName: "Spicy Hub",
+      orderNumber: 701,
+      items: ["Biryani", "Noodles", "Coke"],
+      totalPrice: 500,
+      isDelivered: false
+    };
+
+    function displayOrder() {
+      console.log("========== ORDER SUMMARY ==========");
+      console.log("Restaurant Name :", order.restaurantName);
+      console.log("Order Number    :", order.orderNumber);
+      console.log("Items Ordered   :", order.items.join(", "));
+      console.log("Total Price     : ₹" + order.totalPrice);
+      console.log("Delivery Status :", order.isDelivered ? "Delivered" : "Not Delivered");
+      console.log("===================================");
+      alert("Order summary printed to console. Open console to see details.");
+    }
+
+    function addItem(itemName, price) {
+      order.items.push(itemName);
+      order.totalPrice += price;
+      console.log(itemName + " added. Total: ₹" + order.totalPrice);
+    }
+
+    function removeItem(itemName, price) {
+      const index = order.items.indexOf(itemName);
+      if (index !== -1) {
+        order.items.splice(index, 1);
+        order.totalPrice -= price;
+        console.log(itemName + " removed. Total: ₹" + order.totalPrice);
+      } else {
+        console.log(itemName + " not found in order.");
+      }
+    }
+
+    function deliverOrder() {
+      order.isDelivered = true;
+      console.log("Order marked as delivered.");
+    }
+
+    // Initial display on page load
+    displayOrder();
+  </script>
+
+</body>
+</html>

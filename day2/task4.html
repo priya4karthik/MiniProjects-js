@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Age Verification System</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background: #fff;
+      padding: 30px 40px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      text-align: center;
+      width: 350px;
+    }
+
+    h2 {
+      color: #4caf50;
+      margin-bottom: 20px;
+    }
+
+    input {
+      width: 80%;
+      padding: 8px;
+      margin: 10px 0;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #388e3c;
+    }
+
+    .result {
+      margin-top: 20px;
+      font-weight: bold;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>Age Verification</h2>
+    <input type="number" id="ageInput" placeholder="Enter your age">
+    <br>
+    <button onclick="verifyAge()">Verify Age</button>
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    function verifyAge() {
+      // Store user's age from input
+      let userAge = parseInt(document.getElementById("ageInput").value);
+
+      // Check if age is 18 or older
+      let message = (userAge >= 18) ? "Access Granted" : "Access Denied";
+
+      // Display result on the webpage
+      document.getElementById("result").innerText = message;
+    }
+  </script>
+
+</body>
+</html>

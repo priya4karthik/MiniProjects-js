@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Voting Eligibility System</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background-color: #fff;
+      padding: 30px 40px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      text-align: center;
+    }
+
+    h2 {
+      color: #007bff;
+      margin-bottom: 20px;
+    }
+
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    p {
+      margin-top: 20px;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>Voting Eligibility Checker</h2>
+    <button onclick="checkEligibility()">Check Eligibility</button>
+    <p>Open the console to see the result after checking.</p>
+  </div>
+
+  <script>
+    function checkEligibility() {
+      // Ask user for country and age
+      let citizen = prompt("Enter your country:");
+      let age = parseInt(prompt("Enter your age:"));
+
+      // Check eligibility
+      if (age >= 18 && citizen.trim().toLowerCase() === "india") {
+        console.log("Eligible to Vote");
+      } else {
+        console.log("Not Eligible to Vote");
+      }
+
+      alert("Voting eligibility checked! Open console to see the result.");
+    }
+  </script>
+
+</body>
+</html>

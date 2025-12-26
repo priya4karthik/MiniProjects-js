@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Pattern Generator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background: #fff;
+      padding: 30px 40px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      width: 400px;
+      text-align: center;
+    }
+
+    h2 {
+      color: #673ab7;
+      margin-bottom: 20px;
+    }
+
+    input {
+      width: 60%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+
+    button {
+      background-color: #673ab7;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background-color: #512da8;
+    }
+
+    .result {
+      margin-top: 20px;
+      font-weight: bold;
+      font-size: 16px;
+      color: #333;
+      white-space: pre; /* preserve spaces for pattern */
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>Triangle Pattern Generator</h2>
+    <input type="number" id="rowsInput" placeholder="Enter number of rows">
+    <br>
+    <button onclick="generatePattern()">Generate Pattern</button>
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    function generatePattern() {
+      let rows = parseInt(document.getElementById("rowsInput").value);
+      let resultDiv = document.getElementById("result");
+      resultDiv.innerHTML = "";
+
+      if (isNaN(rows) || rows <= 0) {
+        resultDiv.innerText = "Please enter a valid positive number!";
+        return;
+      }
+
+      let pattern = "";
+      for (let i = 1; i <= rows; i++) {
+        pattern += "* ".repeat(i) + "\n";
+      }
+
+      resultDiv.innerText = pattern;
+    }
+  </script>
+
+</body>
+</html>

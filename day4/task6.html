@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Shopping Cart System</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding-top: 50px;
+    }
+
+    .container {
+      background: #fff;
+      padding: 30px 40px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      width: 400px;
+      text-align: center;
+    }
+
+    h2 {
+      color: #4caf50;
+      margin-bottom: 20px;
+    }
+
+    input, button {
+      width: 80%;
+      padding: 10px;
+      margin: 5px 0;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    button {
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #388e3c;
+    }
+
+    .result {
+      margin-top: 20px;
+      font-weight: bold;
+      font-size: 16px;
+      color: #333;
+      text-align: left;
+    }
+
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 5px;
+    }
+
+    .cart-item button {
+      width: auto;
+      padding: 2px 8px;
+      font-size: 14px;
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>Shopping Cart System</h2>
+    <input type="text" id="itemName" placeholder="Item name">
+    <input type="number" id="itemPrice" placeholder="Item price">
+    <br>
+    <button onclick="addItem()">Add Item</button>
+    <button onclick="viewCart()">View Cart</button>
+    <div class="result" id="cartResult"></div>
+  </div>
+
+  <script>
+    let cart = [];
+
+    function addItem() {
+      const name = document.getElementById("itemName").value.trim();
+      const price = parseFloat(document.getElementById("itemPrice").value);
+
+      if (!name || isNaN(price) || price <= 0) {
+        alert("Enter valid item name and price!");
+        return;
+      }
+
+      cart.push({ name, price });
+      document.getElementById("itemName").value = "";
+      document.getElementById("itemPrice").value = "";
+      alert(`${name} added to cart!`);
+    }
+
+    function removeItem(index) {
+      const removed = cart.splice(index, 1)[0];
+      alert(`${removed.name} removed from cart!`);
+      viewCart();
+    }
+
+    function viewCart() {
+      const resultDiv = document.getElementById("cartResult");
+      resultDiv.innerHTML = "";
+
+      if (cart.length === 0) {
+        resultDiv.innerText = "Your cart is empty.";
+        return;
+      }
+
+      let total = 0;
+      cart.forEach((item, index) => {
+        total += item.price;
+        const div = document.createElement("div");
+        div.className = "cart-item";
+        div.innerHTML = `${item.name} - $${item.price.toFixed(2)} 
+                         <button onclick="removeItem(${index})">Remove</button>`;
+        resultDiv.appendChild(div);
+      });
+
+      const totalDiv = document.createElement("div");
+      totalDiv.style.marginTop = "10px";
+      totalDiv.innerHTML = `<strong>Total: $${total.toFixed(2)}</strong>`;
+      resultDiv.appendChild(totalDiv);
+    }
+  </script>
+
+</body>
+</html>

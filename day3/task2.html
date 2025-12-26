@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Traffic Light System</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background: #fff;
+      padding: 30px 40px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      width: 350px;
+      text-align: center;
+    }
+
+    h2 {
+      color: #ff9800;
+      margin-bottom: 20px;
+    }
+
+    input {
+      width: 80%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+      text-transform: lowercase;
+    }
+
+    button {
+      background-color: #ff9800;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background-color: #f57c00;
+    }
+
+    .result {
+      margin-top: 20px;
+      font-weight: bold;
+      font-size: 18px;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>Traffic Light System</h2>
+    <input type="text" id="colorInput" placeholder="Enter color (red, yellow, green)">
+    <br>
+    <button onclick="checkTrafficLight()">Check Rule</button>
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    function checkTrafficLight() {
+      let color = document.getElementById("colorInput").value.toLowerCase();
+      let message = "";
+
+      switch(color) {
+        case "red":
+          message = "Stop! ⛔";
+          break;
+        case "yellow":
+          message = "Slow down! ⚠️";
+          break;
+        case "green":
+          message = "Go! 🟢";
+          break;
+        default:
+          message = "Invalid color! ❌";
+      }
+
+      document.getElementById("result").innerText = message;
+    }
+  </script>
+
+</body>
+</html>
