@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Student Record Manager</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f9;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 40px;
+    }
+    .container {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      width: 600px;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
+    input {
+      padding: 8px;
+      margin: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    button {
+      padding: 8px 12px;
+      border: none;
+      border-radius: 4px;
+      background: #4CAF50;
+      color: #fff;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #45a049;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: center;
+    }
+    th {
+      background: #f2f2f2;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Student Record Manager</h2>
+    <input type="text" id="stuName" placeholder="Name">
+    <input type="text" id="stuRoll" placeholder="Roll Number">
+    <input type="number" id="stuMarks" placeholder="Marks">
+    <button onclick="addStudent()">Add Student</button>
+    <table id="studentTable">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Roll Number</th>
+          <th>Marks</th>
+          <th>Grade</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <script>
+    // Student Constructor
+    function Student(name, roll, marks) {
+      this.name = name;
+      this.roll = roll;
+      this.marks = marks;
+    }
+
+    // Prototype method to calculate grade
+    Student.prototype.calculateGrade = function() {
+      if (this.marks >= 90) return "A";
+      else if (this.marks >= 80) return "B";
+      else if (this.marks >= 70) return "C";
+      else if (this.marks >= 60) return "D";
+      else return "F";
+    };
+
+    // Array to store students
+    let students = [
+      new Student("Alice", "101", 95),
+      new Student("Bob", "102", 78),
+      new Student("Charlie", "103", 62)
+    ];
+
+    function addStudent() {
+      const name = document.getElementById("stuName").value.trim();
+      const roll = document.getElementById("stuRoll").value.trim();
+      const marks = parseFloat(document.getElementById("stuMarks").value);
+
+      if (!name || !roll || isNaN(marks)) {
+        alert("Please enter valid student details.");
+        return;
+      }
+
+      const newStu = new Student(name, roll, marks);
+      students.push(newStu);
+
+      document.getElementById("stuName").value = "";
+      document.getElementById("stuRoll").value = "";
+      document.getElementById("stuMarks").value = "";
+
+      displayStudents();
+    }
+
+    function displayStudents() {
+      const tbody = document.querySelector("#studentTable tbody");
+      tbody.innerHTML = "";
+
+      students.forEach(stu => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${stu.name}</td>
+          <td>${stu.roll}</td>
+          <td>${stu.marks}</td>
+          <td>${stu.calculateGrade()}</td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    // Initial display
+    displayStudents();
+  </script>
+</body>
+</html>

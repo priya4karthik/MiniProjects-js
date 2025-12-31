@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Product Inventory System</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .container {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      width: 450px;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    input {
+      padding: 8px;
+      margin: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    button {
+      padding: 8px 12px;
+      border: none;
+      border-radius: 4px;
+      background: #4CAF50;
+      color: #fff;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #45a049;
+    }
+    .output {
+      margin-top: 20px;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      background: #fafafa;
+    }
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    li {
+      margin: 5px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Product Inventory System</h2>
+    <input type="text" id="prodName" placeholder="Product Name">
+    <input type="number" id="prodQty" placeholder="Quantity">
+    <button onclick="addProduct()">Add Product</button>
+    <br><br>
+    <input type="text" id="removeName" placeholder="Product Name to Remove">
+    <button onclick="removeProduct()">Remove Product</button>
+    <div class="output" id="output"></div>
+  </div>
+
+  <script>
+    // Inventory Storage
+    let inventory = [
+      { name: "Apples", quantity: 10 },
+      { name: "Bananas", quantity: 20 },
+      { name: "Oranges", quantity: 15 }
+    ];
+
+    function addProduct() {
+      const name = document.getElementById("prodName").value.trim();
+      const qty = parseInt(document.getElementById("prodQty").value);
+
+      if (!name || isNaN(qty) || qty <= 0) {
+        alert("Please enter valid product details.");
+        return;
+      }
+
+      // Check if product already exists
+      const existing = inventory.find(p => p.name.toLowerCase() === name.toLowerCase());
+      if (existing) {
+        existing.quantity += qty;
+      } else {
+        inventory.push({ name, quantity: qty });
+      }
+
+      document.getElementById("prodName").value = "";
+      document.getElementById("prodQty").value = "";
+      displayInventory();
+    }
+
+    function removeProduct() {
+      const name = document.getElementById("removeName").value.trim();
+      const index = inventory.findIndex(p => p.name.toLowerCase() === name.toLowerCase());
+
+      if (index !== -1) {
+        inventory.splice(index, 1);
+        alert(`Product "${name}" removed successfully.`);
+      } else {
+        alert("Product not found.");
+      }
+      document.getElementById("removeName").value = "";
+      displayInventory();
+    }
+
+    function displayInventory() {
+      const output = document.getElementById("output");
+      let html = "<h3>Current Inventory</h3><ul>";
+      inventory.forEach(item => {
+        html += `<li>${item.name} - Quantity: ${item.quantity}</li>`;
+      });
+      html += "</ul>";
+      output.innerHTML = html;
+    }
+
+    // Initial display
+    displayInventory();
+  </script>
+</body>
+</html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Employee Management System</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .container {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      width: 600px;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    input {
+      padding: 8px;
+      margin: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    button {
+      padding: 8px 12px;
+      border: none;
+      border-radius: 4px;
+      background: #4CAF50;
+      color: #fff;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #45a049;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: center;
+    }
+    th {
+      background: #f2f2f2;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Employee Management System</h2>
+    <input type="text" id="empName" placeholder="Name">
+    <input type="text" id="empPosition" placeholder="Position">
+    <input type="number" id="empSalary" placeholder="Salary">
+    <button onclick="addEmployee()">Add Employee</button>
+    <table id="employeeTable">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Position</th>
+          <th>Salary</th>
+          <th>Increase Salary</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <script>
+    // Constructor function for Employee
+    function Employee(name, position, salary) {
+      this.name = name;
+      this.position = position;
+      this.salary = salary;
+
+      // Method to increase salary dynamically
+      this.increaseSalary = function(amount) {
+        this.salary += amount;
+      };
+    }
+
+    // Array to store employees
+    let employees = [];
+
+    function addEmployee() {
+      const name = document.getElementById("empName").value.trim();
+      const position = document.getElementById("empPosition").value.trim();
+      const salary = parseFloat(document.getElementById("empSalary").value);
+
+      if (!name || !position || isNaN(salary) || salary <= 0) {
+        alert("Please enter valid employee details.");
+        return;
+      }
+
+      const newEmp = new Employee(name, position, salary);
+      employees.push(newEmp);
+
+      document.getElementById("empName").value = "";
+      document.getElementById("empPosition").value = "";
+      document.getElementById("empSalary").value = "";
+
+      displayEmployees();
+    }
+
+    function displayEmployees() {
+      const tbody = document.querySelector("#employeeTable tbody");
+      tbody.innerHTML = "";
+
+      employees.forEach((emp, index) => {
+        const row = document.createElement("tr");
+
+        row.innerHTML = `
+          <td>${emp.name}</td>
+          <td>${emp.position}</td>
+          <td>$${emp.salary}</td>
+          <td><button onclick="increaseSalary(${index})">+1000</button></td>
+        `;
+
+        tbody.appendChild(row);
+      });
+    }
+
+    function increaseSalary(index) {
+      employees[index].increaseSalary(1000);
+      displayEmployees();
+    }
+
+    // Initial display
+    displayEmployees();
+  </script>
+</body>
+</html>

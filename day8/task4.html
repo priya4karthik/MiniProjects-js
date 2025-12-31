@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Word Counter</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .container {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      width: 400px;
+      text-align: center;
+    }
+    h2 {
+      margin-bottom: 20px;
+    }
+    textarea {
+      width: 90%;
+      height: 80px;
+      padding: 8px;
+      margin: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      resize: none;
+    }
+    button {
+      padding: 8px 12px;
+      border: none;
+      border-radius: 4px;
+      background: #4CAF50;
+      color: #fff;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    button:hover {
+      background: #45a049;
+    }
+    .result {
+      margin-top: 20px;
+      font-weight: bold;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Word Counter</h2>
+    <textarea id="sentence" placeholder="Enter your sentence here..."></textarea>
+    <br>
+    <button onclick="countWords()">Count Words</button>
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    function countWords() {
+      const sentence = document.getElementById("sentence").value.trim();
+
+      if (!sentence) {
+        document.getElementById("result").textContent = "Please enter a sentence.";
+        return;
+      }
+
+      // Split by spaces and filter out empty strings
+      const words = sentence.split(" ").filter(word => word !== "");
+      const wordCount = words.length;
+
+      document.getElementById("result").textContent = "Word Count: " + wordCount;
+    }
+  </script>
+</body>
+</html>

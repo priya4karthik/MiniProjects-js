@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Library Book Tracker</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .container {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      width: 500px;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    li {
+      background: #fafafa;
+      margin: 5px 0;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    button {
+      margin-left: 10px;
+      padding: 5px 8px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .borrow-btn {
+      background: #4CAF50;
+      color: #fff;
+    }
+    .return-btn {
+      background: #e67e22;
+      color: #fff;
+    }
+    .borrowed-list {
+      margin-top: 20px;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      background: #fafafa;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Library Book Tracker</h2>
+    <ul id="bookList"></ul>
+    <div class="borrowed-list">
+      <h3>Borrowed Books</h3>
+      <ul id="borrowedList"></ul>
+    </div>
+  </div>
+
+  <script>
+    // Store book info in an array of objects
+    let books = [
+      { title: "The Great Gatsby", author: "F. Scott Fitzgerald", isBorrowed: false },
+      { title: "1984", author: "George Orwell", isBorrowed: false },
+      { title: "To Kill a Mockingbird", author: "Harper Lee", isBorrowed: false },
+      { title: "Moby Dick", author: "Herman Melville", isBorrowed: false }
+    ];
+
+    function displayBooks() {
+      const bookList = document.getElementById("bookList");
+      bookList.innerHTML = "";
+
+      books.forEach((book, index) => {
+        const li = document.createElement("li");
+        li.textContent = `${book.title} by ${book.author}`;
+
+        if (!book.isBorrowed) {
+          const borrowBtn = document.createElement("button");
+          borrowBtn.textContent = "Borrow";
+          borrowBtn.className = "borrow-btn";
+          borrowBtn.onclick = () => borrowBook(index);
+          li.appendChild(borrowBtn);
+        } else {
+          const returnBtn = document.createElement("button");
+          returnBtn.textContent = "Return";
+          returnBtn.className = "return-btn";
+          returnBtn.onclick = () => returnBook(index);
+          li.appendChild(returnBtn);
+        }
+
+        bookList.appendChild(li);
+      });
+
+      displayBorrowedBooks();
+    }
+
+    function borrowBook(index) {
+      books[index].isBorrowed = true;
+      displayBooks();
+    }
+
+    function returnBook(index) {
+      books[index].isBorrowed = false;
+      displayBooks();
+    }
+
+    function displayBorrowedBooks() {
+      const borrowedList = document.getElementById("borrowedList");
+      borrowedList.innerHTML = "";
+
+      books.forEach(book => {
+        if (book.isBorrowed) {
+          const li = document.createElement("li");
+          li.textContent = `${book.title} by ${book.author}`;
+          borrowedList.appendChild(li);
+        }
+      });
+    }
+
+    // Initial display
+    displayBooks();
+  </script>
+</body>
+</html>

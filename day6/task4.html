@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Employee Management System</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .container {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      width: 500px;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    input {
+      width: 30%;
+      padding: 8px;
+      margin: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    button {
+      padding: 8px 12px;
+      border: none;
+      border-radius: 4px;
+      background: #4CAF50;
+      color: #fff;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #45a049;
+    }
+    .output {
+      margin-top: 20px;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      background: #fafafa;
+    }
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    li {
+      margin: 5px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Employee Management System</h2>
+    <input type="text" id="empName" placeholder="Name">
+    <input type="text" id="empRole" placeholder="Role">
+    <input type="number" id="empSalary" placeholder="Salary">
+    <button onclick="addEmployee()">Add Employee</button>
+    <br><br>
+    <input type="text" id="removeName" placeholder="Name to remove">
+    <button onclick="removeEmployee()">Remove Employee</button>
+    <div class="output" id="output"></div>
+  </div>
+
+  <script>
+    let employees = [
+      { name: "Alice", role: "Developer", salary: 60000 },
+      { name: "Bob", role: "Designer", salary: 50000 },
+      { name: "Charlie", role: "Manager", salary: 70000 }
+    ];
+
+    function addEmployee() {
+      const name = document.getElementById("empName").value.trim();
+      const role = document.getElementById("empRole").value.trim();
+      const salary = parseFloat(document.getElementById("empSalary").value);
+
+      if (!name || !role || isNaN(salary) || salary <= 0) {
+        alert("Please enter valid employee details.");
+        return;
+      }
+
+      employees.push({ name, role, salary });
+      document.getElementById("empName").value = "";
+      document.getElementById("empRole").value = "";
+      document.getElementById("empSalary").value = "";
+      displayEmployees();
+    }
+
+    function removeEmployee() {
+      const name = document.getElementById("removeName").value.trim();
+      const index = employees.findIndex(emp => emp.name.toLowerCase() === name.toLowerCase());
+
+      if (index !== -1) {
+        employees.splice(index, 1);
+        alert(`Employee ${name} removed successfully.`);
+      } else {
+        alert("Employee not found.");
+      }
+      document.getElementById("removeName").value = "";
+      displayEmployees();
+    }
+
+    function calculateAverageSalary() {
+      if (employees.length === 0) return 0;
+      const total = employees.reduce((sum, emp) => sum + emp.salary, 0);
+      return (total / employees.length).toFixed(2);
+    }
+
+    function listRoles() {
+      const roles = [...new Set(employees.map(emp => emp.role))];
+      return roles.join(", ");
+    }
+
+    function displayEmployees() {
+      const output = document.getElementById("output");
+      let html = "<h3>Employee List</h3><ul>";
+      employees.forEach(emp => {
+        html += `<li>${emp.name} - ${emp.role} - $${emp.salary}</li>`;
+      });
+      html += "</ul>";
+      html += `<p><strong>Average Salary:</strong> $${calculateAverageSalary()}</p>`;
+      html += `<p><strong>Roles in Company:</strong> ${listRoles()}</p>`;
+      output.innerHTML = html;
+    }
+
+    // Initial display
+    displayEmployees();
+  </script>
+</body>
+</html>

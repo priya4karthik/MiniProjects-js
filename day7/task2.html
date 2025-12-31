@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Library Management System</title>
+  <style>
+    /* Style 1: Clean and Modern */
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f9;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 40px;
+    }
+    .container {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      width: 600px;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
+    input {
+      padding: 8px;
+      margin: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    button {
+      padding: 8px 12px;
+      border: none;
+      border-radius: 4px;
+      background: #4CAF50;
+      color: #fff;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #45a049;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: center;
+    }
+    th {
+      background: #f2f2f2;
+    }
+
+    /* Style 2: Dark Theme (toggle-able) */
+    .dark {
+      background: #222;
+      color: #eee;
+    }
+    .dark input, .dark button {
+      background: #333;
+      color: #eee;
+      border: 1px solid #555;
+    }
+    .dark table th {
+      background: #444;
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="container">
+    <h2>Library Management System</h2>
+    <input type="text" id="title" placeholder="Book Title">
+    <input type="text" id="author" placeholder="Author">
+    <input type="number" id="year" placeholder="Year">
+    <button onclick="addBook()">Add Book</button>
+    <br><br>
+    <input type="text" id="searchTitle" placeholder="Search by Title">
+    <button onclick="searchBook()">Search</button>
+    <button onclick="toggleTheme()">Toggle Theme</button>
+    <table id="bookTable">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Author</th>
+          <th>Year</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <script>
+    // Book Constructor
+    function Book(title, author, year) {
+      this.title = title;
+      this.author = author;
+      this.year = year;
+    }
+
+    // Array to store books
+    let library = [
+      new Book("The Great Gatsby", "F. Scott Fitzgerald", 1925),
+      new Book("1984", "George Orwell", 1949),
+      new Book("To Kill a Mockingbird", "Harper Lee", 1960)
+    ];
+
+    function addBook() {
+      const title = document.getElementById("title").value.trim();
+      const author = document.getElementById("author").value.trim();
+      const year = parseInt(document.getElementById("year").value);
+
+      if (!title || !author || isNaN(year)) {
+        alert("Please enter valid book details.");
+        return;
+      }
+
+      const newBook = new Book(title, author, year);
+      library.push(newBook);
+
+      document.getElementById("title").value = "";
+      document.getElementById("author").value = "";
+      document.getElementById("year").value = "";
+
+      displayBooks(library);
+    }
+
+    function displayBooks(books) {
+      const tbody = document.querySelector("#bookTable tbody");
+      tbody.innerHTML = "";
+
+      books.forEach(book => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${book.title}</td>
+          <td>${book.author}</td>
+          <td>${book.year}</td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    function searchBook() {
+      const searchTitle = document.getElementById("searchTitle").value.trim().toLowerCase();
+      const filtered = library.filter(book => book.title.toLowerCase().includes(searchTitle));
+      displayBooks(filtered);
+    }
+
+    function toggleTheme() {
+      document.getElementById("container").classList.toggle("dark");
+    }
+
+    // Initial display
+    displayBooks(library);
+  </script>
+</body>
+</html>

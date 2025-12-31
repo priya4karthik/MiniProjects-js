@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Student Grade Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .container {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      width: 400px;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+    input {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    button {
+      margin-top: 15px;
+      width: 100%;
+      padding: 10px;
+      background: #4CAF50;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover {
+      background: #45a049;
+    }
+    .report {
+      margin-top: 20px;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      background: #fafafa;
+    }
+    .report p {
+      margin: 5px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Student Grade Calculator</h2>
+    <label>Student Name:</label>
+    <input type="text" id="studentName" placeholder="Enter name">
+
+    <label>Marks (comma separated, 3–5 subjects):</label>
+    <input type="text" id="marks" placeholder="e.g. 85,90,78">
+
+    <button onclick="calculateGrade()">Generate Report</button>
+
+    <div class="report" id="report"></div>
+  </div>
+
+  <script>
+    function calculateGrade() {
+      const name = document.getElementById("studentName").value.trim();
+      const marksInput = document.getElementById("marks").value.trim();
+
+      if (!name || !marksInput) {
+        alert("Please enter both name and marks.");
+        return;
+      }
+
+      const marks = marksInput.split(",").map(m => parseFloat(m.trim()));
+      if (marks.length < 3 || marks.length > 5 || marks.some(isNaN)) {
+        alert("Enter valid marks for 3–5 subjects.");
+        return;
+      }
+
+      const total = marks.reduce((a, b) => a + b, 0);
+      const average = total / marks.length;
+
+      let grade;
+      if (average >= 90) grade = "A";
+      else if (average >= 80) grade = "B";
+      else if (average >= 70) grade = "C";
+      else if (average >= 60) grade = "D";
+      else grade = "F";
+
+      document.getElementById("report").innerHTML = `
+        <h3>Grade Report</h3>
+        <p><strong>Student Name:</strong> ${name}</p>
+        <p><strong>Subjects:</strong> ${marks.length}</p>
+        <p><strong>Marks:</strong> ${marks.join(", ")}</p>
+        <p><strong>Total Marks:</strong> ${total}</p>
+        <p><strong>Average:</strong> ${average.toFixed(2)}</p>
+        <p><strong>Grade:</strong> ${grade}</p>
+      `;
+    }
+  </script>
+</body>
+</html>

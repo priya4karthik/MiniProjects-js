@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Username Generator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .container {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      width: 400px;
+      text-align: center;
+    }
+    h2 {
+      margin-bottom: 20px;
+    }
+    input {
+      width: 80%;
+      padding: 8px;
+      margin: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    button {
+      padding: 8px 12px;
+      border: none;
+      border-radius: 4px;
+      background: #4CAF50;
+      color: #fff;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    button:hover {
+      background: #45a049;
+    }
+    .result {
+      margin-top: 20px;
+      font-weight: bold;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Username Generator</h2>
+    <input type="text" id="firstName" placeholder="Enter First Name">
+    <input type="text" id="lastName" placeholder="Enter Last Name">
+    <button onclick="generateUsername()">Generate Username</button>
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    function generateUsername() {
+      const firstName = document.getElementById("firstName").value.trim();
+      const lastName = document.getElementById("lastName").value.trim();
+
+      if (firstName.length < 3 || lastName.length < 3) {
+        alert("Both names must have at least 3 letters.");
+        return;
+      }
+
+      const firstPart = firstName.substring(0, 3).toLowerCase();
+      const lastPart = lastName.substring(0, 3).toLowerCase();
+      const randomNum = Math.floor(Math.random() * 900) + 100; // random number 100-999
+
+      const username = firstPart + lastPart + randomNum;
+      document.getElementById("result").textContent = "Generated Username: " + username;
+    }
+  </script>
+</body>
+</html>
