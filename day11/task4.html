@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Persistent Survey Form</title>
+  <style>
+    body {
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.container {
+  background: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
+  width: 400px;
+}
+
+h1 {
+  text-align: center;
+}
+
+label {
+  font-weight: bold;
+}
+
+input, select, textarea, button {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+button {
+  background-color: #0078d7;
+  color: white;
+  border: none;
+  cursor: pointer;
+  margin-top: 15px;
+}
+
+button:hover {
+  opacity: 0.8;
+}
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Survey Form</h1>
+    <form id="surveyForm">
+      <label for="name">Name:</label>
+      <input type="text" id="name" required><br><br>
+
+      <label for="age">Age:</label>
+      <input type="number" id="age" required><br><br>
+
+      <label for="rating">Rating (1–5):</label>
+      <select id="rating" required>
+        <option value="">Select</option>
+        <option value="1">1 - Poor</option>
+        <option value="2">2 - Fair</option>
+        <option value="3">3 - Good</option>
+        <option value="4">4 - Very Good</option>
+        <option value="5">5 - Excellent</option>
+      </select><br><br>
+
+      <label for="comments">Comments:</label><br>
+      <textarea id="comments" rows="4" cols="40"></textarea><br><br>
+
+      <button type="submit">Save</button>
+    </form>
+  </div>
+
+  <script>
+    const form = document.getElementById("surveyForm");
+const nameInput = document.getElementById("name");
+const ageInput = document.getElementById("age");
+const ratingInput = document.getElementById("rating");
+const commentsInput = document.getElementById("comments");
+
+// Load saved data from localStorage
+window.onload = () => {
+  const savedData = JSON.parse(localStorage.getItem("surveyData"));
+  if (savedData) {
+    nameInput.value = savedData.name || "";
+    ageInput.value = savedData.age || "";
+    ratingInput.value = savedData.rating || "";
+    commentsInput.value = savedData.comments || "";
+  }
+};
+
+// Save data to localStorage on form submit
+form.addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  const surveyData = {
+    name: nameInput.value,
+    age: ageInput.value,
+    rating: ratingInput.value,
+    comments: commentsInput.value
+  };
+
+  localStorage.setItem("surveyData", JSON.stringify(surveyData));
+  alert("Survey data saved successfully!");
+});
+
+  </script>
+</body>
+</html>

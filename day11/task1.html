@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stopwatch with SessionStorage</title>
+  <style>
+    body {
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.container {
+  text-align: center;
+  background: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
+}
+
+#display {
+  font-size: 48px;
+  margin: 20px 0;
+  font-weight: bold;
+}
+
+button {
+  padding: 10px 20px;
+  margin: 5px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#startBtn { background-color: #4CAF50; color: white; }
+#stopBtn { background-color: #f44336; color: white; }
+#resetBtn { background-color: #0078d7; color: white; }
+
+button:hover {
+  opacity: 0.8;
+}
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Stopwatch</h1>
+    <div id="display">00:00:00</div>
+    <div class="buttons">
+      <button id="startBtn">Start</button>
+      <button id="stopBtn">Stop</button>
+      <button id="resetBtn">Reset</button>
+    </div>
+  </div>
+
+  <script>let timer;
+let running = false;
+let startTime;
+let elapsedTime = 0;
+
+const display = document.getElementById("display");
+const startBtn = document.getElementById("startBtn");
+const stopBtn = document.getElementById("stopBtn");
+const resetBtn = document.getElementById("resetBtn");
+
+// Load state from sessionStorage
+if (sessionStorage.getItem("startTime")) {
+  startTime = parseInt(sessionStorage.getItem("startTime"));
+  running = sessionStorage.getItem("running") === "true";
+  elapsedTime = parseInt(sessionStorage.getItem("elapsedTime")) || 0;
+
+  if (running) {
+    timer = setInterval(updateDisplay, 1000);
+  }
+  updateDisplay();
+}
+
+function updateDisplay() {
+  let currentTime = Date.now();
+  let time = elapsedTime;
+
+  if (running) {
+    time += currentTime - startTime;
+  }
+
+  let hrs = Math.floor(time / 3600000);
+  let mins = Math.floor((time % 3600000) / 60000);
+  let secs = Math.floor((time % 60000) / 1000);
+
+  display.textContent =
+    String(hrs).padStart(2, "0") + ":" +
+    String(mins).padStart(2, "0") + ":" +
+    String(secs).padStart(2, "0");
+
+  // Save state
+  sessionStorage.setItem("startTime", startTime);
+  sessionStorage.setItem("elapsedTime", elapsedTime);
+  sessionStorage.setItem("running", running);
+}
+
+startBtn.addEventListener("click", () => {
+  if (!running) {
+    running = true;
+    startTime = Date.now();
+    timer = setInterval(updateDisplay, 1000);
+    sessionStorage.setItem("running", "true");
+  }
+});
+
+stopBtn.addEventListener("click", () => {
+  if (running) {
+    running = false;
+    elapsedTime += Date.now() - startTime;
+    clearInterval(timer);
+    updateDisplay();
+    sessionStorage.setItem("running", "false");
+  }
+});
+
+resetBtn.addEventListener("click", () => {
+  running = false;
+  clearInterval(timer);
+  elapsedTime = 0;
+  display.textContent = "00:00:00";
+  sessionStorage.clear();
+});
+</script>
+</body>
+</html>

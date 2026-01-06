@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Online Order Fulfillment System</title>
+  <style>
+    body {
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+}
+
+.container {
+  background: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
+  width: 600px;
+}
+
+h1, h2 {
+  text-align: center;
+}
+
+input {
+  width: 100%;
+  padding: 8px;
+  margin: 5px 0;
+  border: 2px solid #0078d7;
+  border-radius: 5px;
+}
+
+button {
+  padding: 10px;
+  margin: 10px 0;
+  width: 100%;
+  border: none;
+  border-radius: 5px;
+  background-color: #0078d7;
+  color: white;
+  cursor: pointer;
+}
+
+button:hover {
+  opacity: 0.8;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  background: #eee;
+  padding: 10px;
+  margin: 5px 0;
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Online Order Fulfillment System</h1>
+
+    <!-- Add Order -->
+    <h2>Add Order</h2>
+    <input type="text" id="orderId" placeholder="Order ID">
+    <input type="text" id="customerName" placeholder="Customer Name">
+    <input type="text" id="itemList" placeholder="Items (comma separated)">
+    <input type="number" id="quantity" placeholder="Quantity">
+    <input type="number" id="amount" placeholder="Total Amount">
+    <button id="addOrderBtn">Add Order</button>
+
+    <!-- Pending Orders -->
+    <h2>Pending Orders</h2>
+    <ul id="pendingOrders"></ul>
+
+    <!-- Fulfilled Orders -->
+    <h2>Fulfilled Orders</h2>
+    <ul id="fulfilledOrders"></ul>
+
+    <!-- Revenue -->
+    <h2>Total Revenue: $<span id="totalRevenue">0</span></h2>
+
+    <!-- Customer Summary -->
+    <h2>Customer Order Summary</h2>
+    <input type="text" id="customerSearch" placeholder="Enter Customer Name">
+    <button id="searchCustomerBtn">Search</button>
+    <ul id="customerSummary"></ul>
+  </div>
+
+  <script>
+    let orders = [];
+
+const orderId = document.getElementById("orderId");
+const customerName = document.getElementById("customerName");
+const itemList = document.getElementById("itemList");
+const quantity = document.getElementById("quantity");
+const amount = document.getElementById("amount");
+const addOrderBtn = document.getElementById("addOrderBtn");
+const pendingOrders = document.getElementById("pendingOrders");
+const fulfilledOrders = document.getElementById("fulfilledOrders");
+const totalRevenue = document.getElementById("totalRevenue");
+const customerSearch = document.getElementById("customerSearch");
+const searchCustomerBtn = document.getElementById("searchCustomerBtn");
+const customerSummary = document.getElementById("customerSummary");
+
+// Add Order
+addOrderBtn.addEventListener("click", () => {
+  const order = {
+    id: orderId.value,
+    customer: customerName.value,
+    items: itemList.value.split(",").map(i => i.trim()),
+    quantity: parseInt(quantity.value),
+    amount: parseFloat(amount.value),
+    status: "pending"
+  };
+
+  if (!order.id || !order.customer || order.items.length === 0 || isNaN(order.quantity) || isNaN(order.amount)) {
+    alert("Please fill all fields correctly!");
+    return;
+  }
+
+  orders.push(order);
+  clearInputs();
+  renderOrders();
+  calculateRevenue();
+});
+
+// Fulfill Order
+function fulfillOrder(index) {
+  orders[index].status = "fulfilled";
+  renderOrders();
+  calculateRevenue();
+}
+
+// Render Orders
+function renderOrders() {
+  pendingOrders.innerHTML = "";
+  fulfilledOrders.innerHTML = "";
+
+  orders.forEach((order, index) => {
+    const li = document.createElement("li");
+    li.textContent = `Order ID: ${order.id}, Customer: ${order.customer}, Items: ${order.items.join(", ")}, Qty: ${order.quantity}, Amount: $${order.amount}`;
+
+    if (order.status === "pending") {
+      const fulfillBtn = document.createElement("button");
+      fulfillBtn.textContent = "Fulfill";
+      fulfillBtn.addEventListener("click", () => fulfillOrder(index));
+      li.appendChild(fulfillBtn);
+      pendingOrders.appendChild(li);
+    } else {
+      fulfilledOrders.appendChild(li);
+    }
+  });
+}
+
+// Calculate Revenue
+function calculateRevenue() {
+  let total = 0;
+  orders.forEach(order => {
+    if (order.status === "fulfilled") {
+      total += order.amount;
+    }
+  });
+  totalRevenue.textContent = total.toFixed(2);
+}
+
+// Customer Summary
+searchCustomerBtn.addEventListener("click", () => {
+  const customer = customerSearch.value.toLowerCase();
+  customerSummary.innerHTML = "";
+
+  const results = orders.filter(o => o.customer.toLowerCase() === customer);
+
+  if (results.length === 0) {
+    customerSummary.innerHTML = "<li>No orders found for this customer</li>";
+  } else {
+    results.forEach(order => {
+      const li = document.createElement("li");
+      li.textContent = `Order ID: ${order.id}, Status: ${order.status}, Amount: $${order.amount}`;
+      customerSummary.appendChild(li);
+    });
+  }
+});
+
+// Clear Input Fields
+function clearInputs() {
+  orderId.value = "";
+  customerName.value = "";
+  itemList.value = "";
+  quantity.value = "";
+  amount.value = "";
+}
+
+  </script>
+</body>
+</html>

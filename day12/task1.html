@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inventory Management System</title>
+  <style>
+    body {
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.container {
+  background: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
+  width: 500px;
+}
+
+h1, h2 {
+  text-align: center;
+}
+
+input {
+  width: 100%;
+  padding: 8px;
+  margin: 5px 0;
+  border: 2px solid #0078d7;
+  border-radius: 5px;
+}
+
+button {
+  padding: 10px;
+  margin: 10px 0;
+  width: 100%;
+  border: none;
+  border-radius: 5px;
+  background-color: #0078d7;
+  color: white;
+  cursor: pointer;
+}
+
+button:hover {
+  opacity: 0.8;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  background: #eee;
+  padding: 10px;
+  margin: 5px 0;
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+}
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Inventory Management System</h1>
+
+    <!-- Add Product -->
+    <h2>Add Product</h2>
+    <input type="text" id="productId" placeholder="Product ID">
+    <input type="text" id="productName" placeholder="Product Name">
+    <input type="text" id="productCategory" placeholder="Category">
+    <input type="number" id="productQuantity" placeholder="Quantity">
+    <input type="number" id="productPrice" placeholder="Price">
+    <button id="addProductBtn">Add Product</button>
+
+    <!-- Search Product -->
+    <h2>Search Product</h2>
+    <input type="text" id="searchInput" placeholder="Enter Product ID or Name">
+    <button id="searchBtn">Search</button>
+    <p id="searchResult"></p>
+
+    <!-- Inventory List -->
+    <h2>Inventory</h2>
+    <ul id="inventoryList"></ul>
+
+    <!-- Total Value -->
+    <h2>Total Inventory Value: $<span id="totalValue">0</span></h2>
+  </div>
+
+  <script>
+    let inventory = [];
+
+// DOM Elements
+const productId = document.getElementById("productId");
+const productName = document.getElementById("productName");
+const productCategory = document.getElementById("productCategory");
+const productQuantity = document.getElementById("productQuantity");
+const productPrice = document.getElementById("productPrice");
+const addProductBtn = document.getElementById("addProductBtn");
+const searchInput = document.getElementById("searchInput");
+const searchBtn = document.getElementById("searchBtn");
+const searchResult = document.getElementById("searchResult");
+const inventoryList = document.getElementById("inventoryList");
+const totalValue = document.getElementById("totalValue");
+
+// Add Product
+addProductBtn.addEventListener("click", () => {
+  const product = {
+    id: productId.value,
+    name: productName.value,
+    category: productCategory.value,
+    quantity: parseInt(productQuantity.value),
+    price: parseFloat(productPrice.value)
+  };
+
+  if (!product.id || !product.name || !product.category || isNaN(product.quantity) || isNaN(product.price)) {
+    alert("Please fill all fields correctly!");
+    return;
+  }
+
+  inventory.push(product);
+  clearInputs();
+  renderInventory();
+});
+
+// Search Product
+searchBtn.addEventListener("click", () => {
+  const query = searchInput.value.toLowerCase();
+  const product = inventory.find(p => p.id.toLowerCase() === query || p.name.toLowerCase() === query);
+
+  if (product) {
+    searchResult.textContent = `Found: ${product.name} | Stock: ${product.quantity}`;
+  } else {
+    searchResult.textContent = "Product not found!";
+  }
+});
+
+// Render Inventory
+function renderInventory() {
+  inventoryList.innerHTML = "";
+  let total = 0;
+
+  inventory.forEach((product, index) => {
+    const li = document.createElement("li");
+    li.textContent = `${product.name} (${product.category}) - Qty: ${product.quantity} - $${product.price}`;
+
+    // Add stock button
+    const addBtn = document.createElement("button");
+    addBtn.textContent = "+";
+    addBtn.addEventListener("click", () => {
+      product.quantity++;
+      renderInventory();
+    });
+
+    // Remove stock button
+    const removeBtn = document.createElement("button");
+    removeBtn.textContent = "-";
+    removeBtn.addEventListener("click", () => {
+      if (product.quantity > 0) {
+        product.quantity--;
+        renderInventory();
+      }
+    });
+
+    li.appendChild(addBtn);
+    li.appendChild(removeBtn);
+    inventoryList.appendChild(li);
+
+    total += product.quantity * product.price;
+  });
+
+  totalValue.textContent = total.toFixed(2);
+}
+
+// Clear Input Fields
+function clearInputs() {
+  productId.value = "";
+  productName.value = "";
+  productCategory.value = "";
+  productQuantity.value = "";
+  productPrice.value = "";
+}
+
+  </script>
+</body>
+</html>

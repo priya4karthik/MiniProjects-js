@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customer Orders Management</title>
+  <style>
+    body {
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+}
+
+.container {
+  background: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
+  width: 500px;
+}
+
+h1, h2 {
+  text-align: center;
+}
+
+input {
+  width: 100%;
+  padding: 8px;
+  margin: 5px 0;
+  border: 2px solid #0078d7;
+  border-radius: 5px;
+}
+
+button {
+  padding: 10px;
+  margin: 10px 0;
+  width: 100%;
+  border: none;
+  border-radius: 5px;
+  background-color: #0078d7;
+  color: white;
+  cursor: pointer;
+}
+
+button:hover {
+  opacity: 0.8;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  background: #eee;
+  padding: 10px;
+  margin: 5px 0;
+  border-radius: 5px;
+}
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Customer Orders Management</h1>
+
+    <!-- Add Order -->
+    <h2>Add Order</h2>
+    <input type="text" id="orderId" placeholder="Order ID">
+    <input type="text" id="customerName" placeholder="Customer Name">
+    <input type="text" id="orderedItems" placeholder="Ordered Items (comma separated)">
+    <input type="number" id="totalAmount" placeholder="Total Amount">
+    <button id="addOrderBtn">Add Order</button>
+
+    <!-- Search Order -->
+    <h2>Search Order</h2>
+    <input type="text" id="searchInput" placeholder="Enter Order ID or Customer Name">
+    <button id="searchBtn">Search</button>
+    <p id="searchResult"></p>
+
+    <!-- Filter by Customer -->
+    <h2>Filter Orders by Customer</h2>
+    <input type="text" id="filterCustomer" placeholder="Enter Customer Name">
+    <button id="filterBtn">Filter</button>
+    <ul id="filteredOrders"></ul>
+
+    <!-- All Orders -->
+    <h2>All Orders</h2>
+    <ul id="ordersList"></ul>
+
+    <!-- Total Revenue -->
+    <h2>Total Revenue: $<span id="totalRevenue">0</span></h2>
+  </div>
+
+  <script>
+    let orders = [];
+
+// DOM Elements
+const orderId = document.getElementById("orderId");
+const customerName = document.getElementById("customerName");
+const orderedItems = document.getElementById("orderedItems");
+const totalAmount = document.getElementById("totalAmount");
+const addOrderBtn = document.getElementById("addOrderBtn");
+const searchInput = document.getElementById("searchInput");
+const searchBtn = document.getElementById("searchBtn");
+const searchResult = document.getElementById("searchResult");
+const filterCustomer = document.getElementById("filterCustomer");
+const filterBtn = document.getElementById("filterBtn");
+const filteredOrders = document.getElementById("filteredOrders");
+const ordersList = document.getElementById("ordersList");
+const totalRevenue = document.getElementById("totalRevenue");
+
+// Add Order
+addOrderBtn.addEventListener("click", () => {
+  const order = {
+    id: orderId.value,
+    customer: customerName.value,
+    items: orderedItems.value.split(",").map(item => item.trim()),
+    total: parseFloat(totalAmount.value)
+  };
+
+  if (!order.id || !order.customer || order.items.length === 0 || isNaN(order.total)) {
+    alert("Please fill all fields correctly!");
+    return;
+  }
+
+  orders.push(order);
+  clearInputs();
+  renderOrders();
+  calculateRevenue();
+});
+
+// Search Order
+searchBtn.addEventListener("click", () => {
+  const query = searchInput.value.toLowerCase();
+  const order = orders.find(o => o.id.toLowerCase() === query || o.customer.toLowerCase() === query);
+
+  if (order) {
+    searchResult.textContent = `Order Found: ID ${order.id}, Customer ${order.customer}, Total $${order.total}`;
+  } else {
+    searchResult.textContent = "Order not found!";
+  }
+});
+
+// Filter Orders by Customer
+filterBtn.addEventListener("click", () => {
+  const customer = filterCustomer.value.toLowerCase();
+  filteredOrders.innerHTML = "";
+
+  const results = orders.filter(o => o.customer.toLowerCase() === customer);
+
+  if (results.length === 0) {
+    filteredOrders.innerHTML = "<li>No orders found for this customer</li>";
+  } else {
+    results.forEach(order => {
+      const li = document.createElement("li");
+      li.textContent = `Order ID: ${order.id}, Items: ${order.items.join(", ")}, Total: $${order.total}`;
+      filteredOrders.appendChild(li);
+    });
+  }
+});
+
+// Render All Orders
+function renderOrders() {
+  ordersList.innerHTML = "";
+  orders.forEach(order => {
+    const li = document.createElement("li");
+    li.textContent = `Order ID: ${order.id}, Customer: ${order.customer}, Items: ${order.items.join(", ")}, Total: $${order.total}`;
+    ordersList.appendChild(li);
+  });
+}
+
+// Calculate Total Revenue
+function calculateRevenue() {
+  let total = 0;
+  orders.forEach(order => {
+    total += order.total;
+  });
+  totalRevenue.textContent = total.toFixed(2);
+}
+
+// Clear Input Fields
+function clearInputs() {
+  orderId.value = "";
+  customerName.value = "";
+  orderedItems.value = "";
+  totalAmount.value = "";
+}
+
+  </script>
+</body>
+</html>

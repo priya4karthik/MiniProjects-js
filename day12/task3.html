@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Marks Database</title>
+  <style>
+    body {
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+}
+
+.container {
+  background: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
+  width: 500px;
+}
+
+h1, h2 {
+  text-align: center;
+}
+
+input {
+  width: 100%;
+  padding: 8px;
+  margin: 5px 0;
+  border: 2px solid #0078d7;
+  border-radius: 5px;
+}
+
+button {
+  padding: 10px;
+  margin: 10px 0;
+  width: 100%;
+  border: none;
+  border-radius: 5px;
+  background-color: #0078d7;
+  color: white;
+  cursor: pointer;
+}
+
+button:hover {
+  opacity: 0.8;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  background: #eee;
+  padding: 10px;
+  margin: 5px 0;
+  border-radius: 5px;
+}
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Student Marks Database</h1>
+
+    <!-- Add Student -->
+    <h2>Add Student Record</h2>
+    <input type="text" id="studentId" placeholder="Student ID">
+    <input type="text" id="studentName" placeholder="Student Name">
+    <input type="number" id="marksMath" placeholder="Math Marks">
+    <input type="number" id="marksScience" placeholder="Science Marks">
+    <input type="number" id="marksEnglish" placeholder="English Marks">
+    <button id="addStudentBtn">Add Student</button>
+
+    <!-- Student Records -->
+    <h2>Student Records</h2>
+    <ul id="studentList"></ul>
+
+    <!-- Average Marks -->
+    <h2>Class Average: <span id="classAverage">0</span></h2>
+  </div>
+
+  <script>
+    let students = [];
+
+const studentId = document.getElementById("studentId");
+const studentName = document.getElementById("studentName");
+const marksMath = document.getElementById("marksMath");
+const marksScience = document.getElementById("marksScience");
+const marksEnglish = document.getElementById("marksEnglish");
+const addStudentBtn = document.getElementById("addStudentBtn");
+const studentList = document.getElementById("studentList");
+const classAverage = document.getElementById("classAverage");
+
+// Add Student Record
+addStudentBtn.addEventListener("click", () => {
+  const student = {
+    id: studentId.value,
+    name: studentName.value,
+    marks: {
+      math: parseFloat(marksMath.value),
+      science: parseFloat(marksScience.value),
+      english: parseFloat(marksEnglish.value)
+    }
+  };
+
+  if (!student.id || !student.name || isNaN(student.marks.math) || isNaN(student.marks.science) || isNaN(student.marks.english)) {
+    alert("Please fill all fields correctly!");
+    return;
+  }
+
+  students.push(student);
+  clearInputs();
+  renderStudents();
+  calculateClassAverage();
+});
+
+// Render Student Records
+function renderStudents() {
+  studentList.innerHTML = "";
+  students.forEach(student => {
+    const li = document.createElement("li");
+    const avg = ((student.marks.math + student.marks.science + student.marks.english) / 3).toFixed(2);
+    li.textContent = `${student.name} (ID: ${student.id}) - Math: ${student.marks.math}, Science: ${student.marks.science}, English: ${student.marks.english}, Avg: ${avg}`;
+    studentList.appendChild(li);
+  });
+}
+
+// Calculate Class Average
+function calculateClassAverage() {
+  if (students.length === 0) {
+    classAverage.textContent = "0";
+    return;
+  }
+
+  let total = 0;
+  students.forEach(student => {
+    total += (student.marks.math + student.marks.science + student.marks.english) / 3;
+  });
+
+  classAverage.textContent = (total / students.length).toFixed(2);
+}
+
+// Clear Input Fields
+function clearInputs() {
+  studentId.value = "";
+  studentName.value = "";
+  marksMath.value = "";
+  marksScience.value = "";
+  marksEnglish.value = "";
+}
+
+  </script>
+</body>
+</html>

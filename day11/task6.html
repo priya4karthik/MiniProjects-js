@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Expense Tracker</title>
+  <style>
+    body {
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.container {
+  background: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
+  width: 400px;
+  text-align: center;
+}
+
+.input-section {
+  margin-bottom: 20px;
+}
+
+input {
+  padding: 10px;
+  margin: 5px;
+  border: 2px solid #0078d7;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+button {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  background-color: #0078d7;
+  color: white;
+  cursor: pointer;
+}
+
+button:hover {
+  opacity: 0.8;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  background: #eee;
+  padding: 10px;
+  margin: 5px 0;
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.removeBtn {
+  background: #f44336;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Expense Tracker</h1>
+    <div class="input-section">
+      <input type="text" id="expenseName" placeholder="Expense name">
+      <input type="number" id="expenseAmount" placeholder="Amount">
+      <button id="addBtn">Add Expense</button>
+    </div>
+
+    <h2>Expenses</h2>
+    <ul id="expenseList"></ul>
+
+    <h3>Total: $<span id="totalAmount">0</span></h3>
+  </div>
+
+  <script>
+    const expenseName = document.getElementById("expenseName");
+const expenseAmount = document.getElementById("expenseAmount");
+const addBtn = document.getElementById("addBtn");
+const expenseList = document.getElementById("expenseList");
+const totalAmount = document.getElementById("totalAmount");
+
+// Load expenses from localStorage
+let expenses = JSON.parse(localStorage.getItem("expenses")) || [];
+renderExpenses();
+
+addBtn.addEventListener("click", () => {
+  const name = expenseName.value.trim();
+  const amount = parseFloat(expenseAmount.value);
+
+  if (name === "" || isNaN(amount) || amount <= 0) return;
+
+  const expense = { name, amount };
+  expenses.push(expense);
+  localStorage.setItem("expenses", JSON.stringify(expenses));
+
+  expenseName.value = "";
+  expenseAmount.value = "";
+  renderExpenses();
+});
+
+function renderExpenses() {
+  expenseList.innerHTML = "";
+  let total = 0;
+
+  expenses.forEach((expense, index) => {
+    const li = document.createElement("li");
+    li.textContent = `${expense.name} - $${expense.amount}`;
+
+    const removeBtn = document.createElement("button");
+    removeBtn.textContent = "Remove";
+    removeBtn.classList.add("removeBtn");
+    removeBtn.addEventListener("click", () => {
+      expenses.splice(index, 1);
+      localStorage.setItem("expenses", JSON.stringify(expenses));
+      renderExpenses();
+    });
+
+    li.appendChild(removeBtn);
+    expenseList.appendChild(li);
+    total += expense.amount;
+  });
+
+  totalAmount.textContent = total;
+}
+
+  </script>
+</body>
+</html>

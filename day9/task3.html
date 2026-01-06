@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Live Search Filter</title>
+  <style>
+    body {
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.container {
+  background: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
+  width: 300px;
+  text-align: center;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 2px solid #0078d7;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  padding: 8px;
+  border-bottom: 1px solid #ddd;
+}
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Live Search Filter</h1>
+    <input type="text" id="searchInput" placeholder="Search names...">
+    <ul id="itemList">
+      <li>Apple</li>
+      <li>Banana</li>
+      <li>Orange</li>
+      <li>Mango</li>
+      <li>Grapes</li>
+      <li>Pineapple</li>
+      <li>Strawberry</li>
+      <li>Watermelon</li>
+    </ul>
+  </div>
+
+  <script>const searchInput = document.getElementById("searchInput");
+const itemList = document.getElementById("itemList");
+const items = itemList.getElementsByTagName("li");
+
+searchInput.addEventListener("keyup", function() {
+  const filter = searchInput.value.toLowerCase();
+
+  for (let i = 0; i < items.length; i++) {
+    let text = items[i].textContent || items[i].innerText;
+    if (text.toLowerCase().includes(filter)) {
+      items[i].style.display = "";
+    } else {
+      items[i].style.display = "none";
+    }
+  }
+});
+</script>
+</body>
+</html>

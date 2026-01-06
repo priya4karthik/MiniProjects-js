@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dynamic Theme Switcher</title>
+  <style>
+    body {
+  font-family: Arial, sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  text-align: center;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
+}
+
+/* Default Theme */
+body {
+  background-color: #f5f5f5;
+  color: #000;
+}
+
+button {
+  padding: 10px 20px;
+  margin: 5px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+/* Theme Styles */
+.blue-theme {
+  background-color: #0078d7;
+  color: #fff;
+}
+
+.green-theme {
+  background-color: #4CAF50;
+  color: #fff;
+}
+
+.yellow-theme {
+  background-color: #FFD700;
+  color: #000;
+}
+
+.pink-theme {
+  background-color: #FF69B4;
+  color: #fff;
+}
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Dynamic Theme Switcher</h1>
+    <p>Select a theme below:</p>
+    <div class="buttons">
+      <button class="theme-btn" data-theme="blue">Blue</button>
+      <button class="theme-btn" data-theme="green">Green</button>
+      <button class="theme-btn" data-theme="yellow">Yellow</button>
+      <button class="theme-btn" data-theme="pink">Pink</button>
+    </div>
+  </div>
+
+  <script> const buttons = document.querySelectorAll(".theme-btn");
+const body = document.body;
+
+buttons.forEach(button => {
+  button.addEventListener("click", () => {
+    // Remove any existing theme classes
+    body.className = "";
+
+    // Add the selected theme class
+    const theme = button.getAttribute("data-theme");
+    body.classList.add(`${theme}-theme`);
+  });
+});
+</script>
+</body>
+</html>

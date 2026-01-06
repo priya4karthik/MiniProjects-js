@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Performance Dashboard</title>
+  <style>
+    body {
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+}
+
+.container {
+  background: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
+  width: 700px;
+}
+
+h1, h2 {
+  text-align: center;
+}
+
+input {
+  width: 18%;
+  padding: 8px;
+  margin: 5px;
+  border: 2px solid #0078d7;
+  border-radius: 5px;
+}
+
+button {
+  padding: 10px;
+  margin: 10px 0;
+  border: none;
+  border-radius: 5px;
+  background-color: #0078d7;
+  color: white;
+  cursor: pointer;
+}
+
+button:hover {
+  opacity: 0.8;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+th, td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: center;
+}
+
+.pass {
+  background-color: #c8e6c9; /* green */
+}
+
+.fail {
+  background-color: #ffcdd2; /* red */
+}
+
+.distinction {
+  font-weight: bold;
+  color: #4CAF50;
+}
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Student Performance Dashboard</h1>
+
+    <!-- Add Student -->
+    <h2>Add Student</h2>
+    <input type="text" id="studentName" placeholder="Student Name">
+    <input type="text" id="rollNumber" placeholder="Roll Number">
+    <input type="number" id="marksMath" placeholder="Math Marks">
+    <input type="number" id="marksScience" placeholder="Science Marks">
+    <input type="number" id="marksEnglish" placeholder="English Marks">
+    <button id="addStudentBtn">Add Student</button>
+
+    <!-- Student Records -->
+    <h2>Student Records</h2>
+    <table id="studentTable">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Roll No</th>
+          <th>Math</th>
+          <th>Science</th>
+          <th>English</th>
+          <th>Total</th>
+          <th>Average</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <!-- Top Performers -->
+    <h2>Top Performers</h2>
+    <ul id="topPerformers"></ul>
+  </div>
+
+  <script>
+    let students = [];
+
+const studentName = document.getElementById("studentName");
+const rollNumber = document.getElementById("rollNumber");
+const marksMath = document.getElementById("marksMath");
+const marksScience = document.getElementById("marksScience");
+const marksEnglish = document.getElementById("marksEnglish");
+const addStudentBtn = document.getElementById("addStudentBtn");
+const studentTableBody = document.querySelector("#studentTable tbody");
+const topPerformers = document.getElementById("topPerformers");
+
+addStudentBtn.addEventListener("click", () => {
+  const student = {
+    name: studentName.value,
+    roll: rollNumber.value,
+    marks: {
+      math: parseFloat(marksMath.value),
+      science: parseFloat(marksScience.value),
+      english: parseFloat(marksEnglish.value)
+    }
+  };
+
+  if (!student.name || !student.roll || isNaN(student.marks.math) || isNaN(student.marks.science) || isNaN(student.marks.english)) {
+    alert("Please fill all fields correctly!");
+    return;
+  }
+
+  student.total = student.marks.math + student.marks.science + student.marks.english;
+  student.average = student.total / 3;
+  student.status = student.average >= 40 ? "Pass" : "Fail";
+
+  students.push(student);
+  clearInputs();
+  renderStudents();
+  renderTopPerformers();
+});
+
+// Render Students
+function renderStudents() {
+  studentTableBody.innerHTML = "";
+
+  // Sort by performance (average descending)
+  students.sort((a, b) => b.average - a.average);
+
+  students.forEach(student => {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td>${student.name}</td>
+      <td>${student.roll}</td>
+      <td>${student.marks.math}</td>
+      <td>${student.marks.science}</td>
+      <td>${student.marks.english}</td>
+      <td>${student.total}</td>
+      <td>${student.average.toFixed(2)}</td>
+      <td>${student.status}</td>
+    `;
+
+    if (student.status === "Pass") {
+      row.classList.add("pass");
+    } else {
+      row.classList.add("fail");
+    }
+
+    studentTableBody.appendChild(row);
+  });
+}
+
+// Render Top Performers
+function renderTopPerformers() {
+  topPerformers.innerHTML = "";
+  const distinction = students.filter(s => s.average >= 75);
+
+  if (distinction.length === 0) {
+    topPerformers.innerHTML = "<li>No students with distinction</li>";
+  } else {
+    distinction.forEach(student => {
+      const li = document.createElement("li");
+      li.textContent = `${student.name} (Roll: ${student.roll}) - Avg: ${student.average.toFixed(2)}`;
+      li.classList.add("distinction");
+      topPerformers.appendChild(li);
+    });
+  }
+}
+
+// Clear Input Fields
+function clearInputs() {
+  studentName.value = "";
+  rollNumber.value = "";
+  marksMath.value = "";
+  marksScience.value = "";
+  marksEnglish.value = "";
+}
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Keyboard Shortcut Trigger</title>
+  <style>
+    body {
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.container {
+  background: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
+  text-align: center;
+}
+
+#message {
+  margin-top: 20px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #0078d7;
+}
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Keyboard Shortcut Trigger</h1>
+    <p>Try pressing <strong>Ctrl + S</strong> or <strong>Alt + M</strong></p>
+    <div id="message"></div>
+  </div>
+
+  <script> const message = document.getElementById("message");
+
+document.addEventListener("keydown", function(event) {
+  // Ctrl + S
+  if (event.ctrlKey && event.key.toLowerCase() === "s") {
+    event.preventDefault(); // Prevent browser's default save dialog
+    message.textContent = "Save Triggered!";
+  }
+
+  // Alt + M
+  if (event.altKey && event.key.toLowerCase() === "m") {
+    message.textContent = "Menu Triggered!";
+  }
+});
+</script>
+</body>
+</html>
