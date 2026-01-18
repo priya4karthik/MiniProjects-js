@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>API Response Logger</title>
+</head>
+<body>
+
+<h2>API Response Logger</h2>
+
+<button onclick="fetchUsers()">Fetch Users</button>
+
+<ul id="userList"></ul>
+
+<script>
+const API_URL = "https://jsonplaceholder.typicode.com/users";
+
+// Fetch users
+async function fetchUsers() {
+  try {
+    const response = await fetch(API_URL);
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch");
+    }
+
+    const users = await response.json();
+
+    // Log success
+    localStorage.setItem("apiSuccess", JSON.stringify(users));
+
+    displayUsers(users);
+
+  } catch (error) {
+    // Log error
+    localStorage.setItem("apiError", error.message);
+    console.error("API Error:", error.message);
+  }
+}
+
+// Display users
+function displayUsers(users) {
+  const list = document.getElementById("userList");
+  list.innerHTML = "";
+
+  users.forEach(user => {
+    const li = document.createElement("li");
+    li.textContent = `${user.name} - ${user.email}`;
+    list.appendChild(li);
+  });
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,5 @@
+[
+  { "id": 101, "name": "Alice Johnson", "position": "Software Engineer", "dept": "IT" },
+  { "id": 102, "name": "Mark Smith", "position": "UI Designer", "dept": "Design" },
+  { "id": 103, "name": "Sarah Lee", "position": "Project Manager", "dept": "Operations" }
+]

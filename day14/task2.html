@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Air Quality Checker</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    h1 { color: #333; }
+    select, button { padding: 10px; font-size: 16px; margin: 10px 0; }
+    #result { margin-top: 20px; font-size: 18px; }
+    .good { color: green; }
+    .moderate { color: orange; }
+    .poor { color: red; }
+  </style>
+</head>
+<body>
+  <h1>🌍 Real-Time Air Quality Checker</h1>
+  
+  <label for="city">Select City:</label>
+  <select id="city">
+    <option value="Bengaluru">Bengaluru</option>
+    <option value="Delhi">Delhi</option>
+    <option value="Mumbai">Mumbai</option>
+    <option value="Chennai">Chennai</option>
+  </select>
+  
+  <button id="check">Check AQI</button>
+  
+  <div id="result"></div>
+  
+  <script>
+    const fallbackData = {
+      "Bengaluru": { pm25: 55, pm10: 80, advice: "Moderate air quality. Sensitive groups should limit outdoor exertion." },
+      "Delhi": { pm25: 150, pm10: 200, advice: "Poor air quality. Consider wearing a mask outside." },
+      "Mumbai": { pm25: 70, pm10: 100, advice: "Moderate air quality. Sensitive groups should limit outdoor exertion." },
+      "Chennai": { pm25: 40, pm10: 60, advice: "Fair air quality. Safe for most people." }
+    };
+
+    document.getElementById("check").addEventListener("click", async () => {
+      const city = document.getElementById("city").value;
+      const url = `https://api.openaq.org/v2/latest?city=${city}&limit=1`;
+
+      try {
+        const res = await fetch(url);
+        const data = await res.json();
+
+        if (!data.results || data.results.length === 0) throw new Error("No data");
+
+        const measurements = data.results[0].measurements;
+        let pollutantsHTML = "<ul>";
+        measurements.forEach(m => {
+          pollutantsHTML += `<li>${m.parameter.toUpperCase()}: ${m.value} ${m.unit}</li>`;
+        });
+        pollutantsHTML += "</ul>";
+
+        document.getElementById("result").innerHTML = `
+          <p>City: ${city}</p>
+          <p>Pollutants:</p>
+          ${pollutantsHTML}
+          <p><strong>Health Advice:</strong> Based on PM2.5 levels, check local guidance.</p>
+        `;
+      } catch (err) {
+        // Fallback if API fails
+        const fb = fallbackData[city];
+        document.getElementById("result").innerHTML = `
+          <p>City: ${city}</p>
+          <p>⚠️ Could not fetch live data. Showing fallback values:</p>
+          <ul>
+            <li>PM2.5: ${fb.pm25} µg/m³</li>
+            <li>PM10: ${fb.pm10} µg/m³</li>
+          </ul>
+          <p class="moderate"><strong>Health Advice:</strong> ${fb.advice}</p>
+        `;
+      }
+    });
+  </script>
+</body>
+</html>

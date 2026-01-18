@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>NASA Picture of the Day Viewer</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; text-align: center; }
+    h1 { color: #333; }
+    input, button { padding: 10px; font-size: 16px; margin: 10px; }
+    #result { margin-top: 20px; }
+    img, iframe { max-width: 100%; margin-top: 20px; }
+    .error { color: red; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h1>🚀 NASA Picture of the Day Viewer</h1>
+  
+  <label for="date">Select Date:</label>
+  <input type="date" id="date">
+  <button id="fetch">Fetch Picture</button>
+  
+  <div id="result"></div>
+  
+  <script>
+    const apiKey = "DEMO_KEY"; // 🔑 Replace with your own NASA API key
+    
+    document.getElementById("fetch").addEventListener("click", async () => {
+      const date = document.getElementById("date").value;
+      const resultBox = document.getElementById("result");
+      
+      let url = `https://api.nasa.gov/planetary/apod?api_key=${apiKey}`;
+      if (date) url += `&date=${date}`;
+      
+      try {
+        const res = await fetch(url);
+        if (!res.ok) throw new Error("Could not fetch data");
+        
+        const data = await res.json();
+        
+        let mediaElement = "";
+        if (data.media_type === "image") {
+          mediaElement = `<img src="${data.url}" alt="${data.title}">`;
+        } else if (data.media_type === "video") {
+          mediaElement = `<iframe src="${data.url}" frameborder="0" allowfullscreen></iframe>`;
+        }
+        
+        resultBox.innerHTML = `
+          <h2>${data.title}</h2>
+          <p><em>${data.date}</em></p>
+          ${mediaElement}
+          <p>${data.explanation}</p>
+        `;
+      } catch (err) {
+        resultBox.innerHTML = `
+          <p class="error">❌ Could not fetch NASA data.</p>
+          <p>Showing fallback image:</p>
+          <img src="https://apod.nasa.gov/apod/image/1901/LOmosaicApollo11.jpg" alt="Fallback NASA Image">
+          <p>Apollo 11 landing site mosaic.</p>
+        `;
+      }
+    });
+  </script>
+</body>
+</html>

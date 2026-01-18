@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>User Registration Form</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #74ebd5 0%, #ACB6E5 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      width: 350px;
+      animation: fadeIn 0.8s ease-in-out;
+    }
+
+    h1 {
+      text-align: center;
+      color: #444;
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 10px;
+      color: #333;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    input:focus {
+      border-color: #74ebd5;
+      box-shadow: 0 0 8px rgba(116, 235, 213, 0.6);
+      outline: none;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 20px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: transform 0.2s, background 0.3s;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+      background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+    }
+
+    .error {
+      color: #e74c3c;
+      font-size: 14px;
+      margin-top: 4px;
+    }
+
+    .success {
+      color: #27ae60;
+      font-weight: bold;
+      text-align: center;
+      margin-top: 15px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>📝 Register</h1>
+    <form id="registrationForm">
+      <label>Name:</label>
+      <input type="text" id="name">
+      <div id="nameError" class="error"></div>
+      
+      <label>Email:</label>
+      <input type="text" id="email">
+      <div id="emailError" class="error"></div>
+      
+      <label>Password:</label>
+      <input type="password" id="password">
+      <div id="passwordError" class="error"></div>
+      
+      <button type="submit">Register</button>
+    </form>
+    <div id="result"></div>
+  </div>
+
+  <script>
+    const form = document.getElementById("registrationForm");
+    const resultBox = document.getElementById("result");
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      
+      document.getElementById("nameError").textContent = "";
+      document.getElementById("emailError").textContent = "";
+      document.getElementById("passwordError").textContent = "";
+      resultBox.textContent = "";
+
+      try {
+        const name = document.getElementById("name").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value.trim();
+
+        if (!name) throw { field: "name", message: "Name is required." };
+        if (!email) throw { field: "email", message: "Email is required." };
+
+        const emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+        if (!emailPattern.test(email)) throw { field: "email", message: "Invalid email format." };
+
+        if (!password) throw { field: "password", message: "Password is required." };
+
+        resultBox.innerHTML = `<p class="success">✅ Registration successful!</p>`;
+      } catch (err) {
+        if (err.field) {
+          document.getElementById(err.field + "Error").textContent = err.message;
+        } else {
+          resultBox.innerHTML = `<p class="error">❌ ${err.message}</p>`;
+        }
+      }
+    });
+  </script>
+</body>
+</html>

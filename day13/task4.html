@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Employee Management System</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; padding: 40px; }
+.container { max-width: 900px; margin: auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+
+h2 { margin-bottom: 20px; color: #1a73e8; }
+
+form { display: flex; gap: 10px; margin-bottom: 30px; flex-wrap: wrap; }
+input, select { padding: 10px; border: 1px solid #ddd; border-radius: 6px; flex: 1; }
+button { padding: 10px 20px; background: #1a73e8; color: white; border: none; border-radius: 6px; cursor: pointer; }
+
+table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+th, td { text-align: left; padding: 12px; border-bottom: 1px solid #eee; }
+th { background: #f8f9fa; }
+
+.delete-btn { background: #d93025; padding: 5px 12px; font-size: 0.85rem; }
+.delete-btn:hover { background: #a50e0e; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>👥 Employee Management</h2>
+        
+        <form id="employee-form">
+            <input type="text" id="name" placeholder="Full Name" required>
+            <input type="text" id="position" placeholder="Position" required>
+            <select id="dept">
+                <option value="IT">IT</option>
+                <option value="Design">Design</option>
+                <option value="Operations">Operations</option>
+                <option value="HR">HR</option>
+            </select>
+            <button type="submit">Add Employee</button>
+        </form>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Position</th>
+                    <th>Department</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="employee-table-body">
+                </tbody>
+        </table>
+    </div>
+    <script>
+        let employees = [];
+const tableBody = document.getElementById('employee-table-body');
+const employeeForm = document.getElementById('employee-form');
+
+// 1. Fetch Employees
+async function fetchEmployees() {
+    try {
+        const response = await fetch('employees.json');
+        employees = await response.json();
+        renderTable();
+    } catch (error) {
+        console.error("Error fetching data:", error);
+    }
+}
+
+// 2. Render Table
+function renderTable() {
+    tableBody.innerHTML = "";
+    employees.forEach(emp => {
+        const row = `
+            <tr>
+                <td>${emp.id}</td>
+                <td>${emp.name}</td>
+                <td>${emp.position}</td>
+                <td>${emp.dept}</td>
+                <td><button class="delete-btn" onclick="deleteEmployee(${emp.id})">Delete</button></td>
+            </tr>
+        `;
+        tableBody.innerHTML += row;
+    });
+}
+
+// 3. Add Employee
+employeeForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    
+    const newEmp = {
+        id: Date.now(), // Unique ID based on timestamp
+        name: document.getElementById('name').value,
+        position: document.getElementById('position').value,
+        dept: document.getElementById('dept').value
+    };
+
+    employees.push(newEmp);
+    renderTable();
+    employeeForm.reset();
+});
+
+// 4. Delete Employee
+function deleteEmployee(id) {
+    employees = employees.filter(emp => emp.id !== id);
+    renderTable();
+}
+
+fetchEmployees();
+    </script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+[
+  { "id": 1, "name": "Wireless Headphones", "price": 150, "category": "Electronics", "desc": "High-quality noise-canceling headphones." },
+  { "id": 2, "name": "Leather Boots", "price": 120, "category": "Fashion", "desc": "Durable and stylish leather boots." },
+  { "id": 3, "name": "Gaming Laptop", "price": 1200, "category": "Electronics", "desc": "High-performance laptop for gaming." },
+  { "id": 4, "name": "Smart Watch", "price": 250, "category": "Electronics", "desc": "Track your fitness and notifications." },
+  { "id": 5, "name": "Canvas Backpack", "price": 45, "category": "Fashion", "desc": "Spacious backpack for daily use." }
+]

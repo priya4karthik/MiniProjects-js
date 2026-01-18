@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Form Validator</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+  body {
+    background: #f4f6f8;
+    font-family: Arial, sans-serif;
+    padding: 20px;
+  }
+
+  .form-box {
+    max-width: 400px;
+    margin: auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  }
+
+  h2 {
+    text-align: center;
+  }
+
+  input {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }
+
+  button {
+    width: 100%;
+    padding: 10px;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .error {
+    color: #d32f2f;
+    margin-top: 10px;
+  }
+
+  .success {
+    color: #2e7d32;
+    margin-top: 10px;
+  }
+</style>
+</head>
+<body>
+
+<div class="form-box">
+  <h2>Form Validator</h2>
+
+  <input type="text" id="name" placeholder="Name">
+  <input type="number" id="age" placeholder="Age">
+  <input type="email" id="email" placeholder="Email">
+  <input type="password" id="password" placeholder="Password">
+
+  <button onclick="validateForm()">Submit</button>
+
+  <div id="message"></div>
+</div>
+
+<script>
+// Custom Error Classes
+class InvalidNameError extends Error {}
+class InvalidAgeError extends Error {}
+class InvalidEmailError extends Error {}
+class WeakPasswordError extends Error {}
+
+function validateForm() {
+  const message = document.getElementById("message");
+  message.textContent = "";
+  message.className = "";
+
+  try {
+    const name = document.getElementById("name").value.trim();
+    const age = Number(document.getElementById("age").value);
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+
+    if (name === "") {
+      throw new InvalidNameError("Name cannot be empty");
+    }
+
+    if (isNaN(age) || age < 18 || age > 100) {
+      throw new InvalidAgeError("Age must be between 18 and 100");
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      throw new InvalidEmailError("Invalid email format");
+    }
+
+    if (password.length < 6) {
+      throw new WeakPasswordError("Password must be at least 6 characters");
+    }
+
+    message.textContent = "Form submitted successfully!";
+    message.className = "success";
+
+  } catch (error) {
+    message.textContent = error.message;
+    message.className = "error";
+  }
+}
+</script>
+
+</body>
+</html>

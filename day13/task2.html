@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Search App</title>
+    <style>
+        :root {
+    --bg-dark: #0f172a;
+    --card-bg: #1e293b;
+    --accent: #38bdf8;
+    --text-white: #f8fafc;
+    --text-gray: #94a3b8;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--bg-dark);
+    color: var(--text-white);
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 40px 20px;
+}
+
+.container {
+    width: 100%;
+    max-width: 700px;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+header h1 {
+    font-size: 2.5rem;
+    color: var(--accent);
+    margin-bottom: 5px;
+}
+
+header p {
+    color: var(--text-gray);
+}
+
+.search-container {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 40px;
+}
+
+input {
+    flex: 1;
+    padding: 15px 20px;
+    border-radius: 12px;
+    border: 2px solid #334155;
+    background: #1e293b;
+    color: white;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+input:focus {
+    border-color: var(--accent);
+}
+
+button {
+    padding: 0 25px;
+    border-radius: 12px;
+    border: none;
+    background-color: var(--accent);
+    color: #0f172a;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: transform 0.2s, background 0.3s;
+}
+
+button:hover {
+    background-color: #7dd3fc;
+    transform: translateY(-2px);
+}
+
+/* Movie Result Card */
+.movie-card {
+    background: var(--card-bg);
+    border-radius: 20px;
+    overflow: hidden;
+    animation: fadeIn 0.5s ease-in;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.main-info {
+    display: flex;
+    gap: 25px;
+    padding: 25px;
+}
+
+.poster {
+    width: 200px;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 12px;
+    background-color: #334155;
+}
+
+.details h2 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.meta {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.rating { color: #fbbf24; }
+
+.genres {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.genres span {
+    background: #334155;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+}
+
+.summary {
+    padding: 0 25px 25px;
+    border-top: 1px solid #334155;
+    padding-top: 20px;
+}
+
+.summary h3 {
+    margin-bottom: 10px;
+    color: var(--accent);
+}
+
+.summary p {
+    color: var(--text-gray);
+    line-height: 1.6;
+}
+
+.placeholder-text, .msg {
+    text-align: center;
+    color: var(--text-gray);
+    margin-top: 50px;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .main-info { flex-direction: column; align-items: center; text-align: center; }
+    .genres { justify-content: center; }
+}
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>🎬 MovieSearch</h1>
+            <p>Find your favorite TV shows and movies</p>
+        </header>
+
+        <div class="search-container">
+            <input type="text" id="movie-input" placeholder="Enter movie or show title...">
+            <button id="search-btn">Search</button>
+        </div>
+
+        <div id="result">
+            <p class="placeholder-text">Your search results will appear here.</p>
+        </div>
+    </div>
+
+    <script>
+        const searchBtn = document.getElementById('search-btn');
+const movieInput = document.getElementById('movie-input');
+const resultContainer = document.getElementById('result');
+
+async function searchMovie() {
+    const query = movieInput.value.trim();
+
+    if (!query) {
+        resultContainer.innerHTML = `<p class="msg">Please enter a title to search.</p>`;
+        return;
+    }
+
+    resultContainer.innerHTML = `<p class="msg">Searching for "${query}"...</p>`;
+
+    try {
+        // Fetching from TVMaze API (Public - No Key Needed)
+        const response = await fetch(`https://api.tvmaze.com/singlesearch/shows?q=${query}`);
+        
+        if (!response.ok) {
+            throw new Error("Movie not found");
+        }
+
+        const data = await response.json();
+
+        // Injecting the data into the HTML
+        resultContainer.innerHTML = `
+            <div class="movie-card">
+                <div class="main-info">
+                    <img src="${data.image ? data.image.medium : 'https://via.placeholder.com/210x295?text=No+Image'}" 
+                         alt="${data.name}" class="poster">
+                    
+                    <div class="details">
+                        <h2>${data.name}</h2>
+                        <div class="meta">
+                            <span class="rating">⭐ ${data.rating.average || 'N/A'}</span>
+                            <span>${data.premiered ? data.premiered.split('-')[0] : 'N/A'}</span>
+                            <span>${data.runtime ? data.runtime + ' min' : ''}</span>
+                        </div>
+                        <div class="genres">
+                            ${data.genres.map(genre => `<span>${genre}</span>`).join('')}
+                        </div>
+                        <p><strong>Status:</strong> ${data.status}</p>
+                        <p><strong>Language:</strong> ${data.language}</p>
+                    </div>
+                </div>
+                <div class="summary">
+                    <h3>Summary</h3>
+                    ${data.summary || '<p>No summary available for this show.</p>'}
+                </div>
+            </div>
+        `;
+
+    } catch (error) {
+        resultContainer.innerHTML = `<p class="msg">❌ Could not find that movie/show. Please try another title.</p>`;
+        console.error(error);
+    }
+}
+
+// Event Listeners
+searchBtn.addEventListener('click', searchMovie);
+
+// Search when pressing "Enter" key
+movieInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+        searchMovie();
+    }
+});
+    </script>
+</body>
+</html>

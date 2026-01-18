@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Open Weather App</title>
+    <style>
+        body {
+    background: #000428;
+    background: linear-gradient(to right, #004e92, #000428);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Segoe UI', sans-serif;
+    color: white;
+}
+
+.container {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 2rem;
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    width: 350px;
+    text-align: center;
+}
+
+.search-box {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 30px;
+}
+
+input {
+    flex: 1;
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+}
+
+button {
+    padding: 10px 15px;
+    border-radius: 10px;
+    border: none;
+    background: #4facfe;
+    color: white;
+    cursor: pointer;
+}
+
+.temp-display {
+    font-size: 4rem;
+    font-weight: bold;
+    margin: 10px 0;
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="search-box">
+            <input type="text" id="city-input" placeholder="Enter City (e.g. Tokyo)">
+            <button id="search-btn">Search</button>
+        </div>
+
+        <div id="display" class="weather-info">
+            <h1 id="city-name">--</h1>
+            <div class="temp-display">
+                <span id="temp">--</span>°C
+            </div>
+            <p id="description">Search for a city to see the weather</p>
+        </div>
+    </div>
+    <script>
+        const searchBtn = document.getElementById('search-btn');
+const cityInput = document.getElementById('city-input');
+
+async function getWeather() {
+    const city = cityInput.value.trim();
+    if (!city) return;
+
+    try {
+        // 1. Get Coordinates (Geocoding)
+        const geoRes = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${city}&count=1`);
+        const geoData = await geoRes.json();
+
+        if (!geoData.results) {
+            alert("City not found");
+            return;
+        }
+
+        const { latitude, longitude, name, country } = geoData.results[0];
+
+        // 2. Get Weather Data
+        const weatherRes = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true`);
+        const weatherData = await weatherRes.json();
+
+        // 3. Update UI
+        document.getElementById('city-name').innerText = `${name}, ${country}`;
+        document.getElementById('temp').innerText = Math.round(weatherData.current_weather.temperature);
+        document.getElementById('description').innerText = `Wind Speed: ${weatherData.current_weather.windspeed} km/h`;
+
+    } catch (error) {
+        console.error("Error fetching data:", error);
+    }
+}
+
+searchBtn.addEventListener('click', getWeather);
+cityInput.addEventListener('keypress', (e) => { if(e.key === 'Enter') getWeather(); });
+    </script>
+</body>
+</html>

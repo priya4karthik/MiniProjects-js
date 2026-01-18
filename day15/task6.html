@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Error Logging System</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #f4f6f8;
+    padding: 20px;
+  }
+
+  .container {
+    max-width: 600px;
+    margin: auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  }
+
+  h2 {
+    text-align: center;
+  }
+
+  input, select, button {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }
+
+  button {
+    background: #4CAF50;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+  }
+
+  .log {
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 5px;
+    font-size: 14px;
+  }
+
+  .log.info { background: #e3f2fd; }
+  .log.warn { background: #fff3cd; }
+  .log.error { background: #fdecea; }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h2>🧪 Error Logging System</h2>
+
+  <input type="text" id="message" placeholder="Enter log message">
+  
+  <select id="type">
+    <option value="log">Log</option>
+    <option value="warn">Warning</option>
+    <option value="error">Error</option>
+  </select>
+
+  <button onclick="addLog()">Add Log</button>
+
+  <div id="logs"></div>
+</div>
+
+<script>
+const logs = [];
+
+// Add log
+function addLog() {
+  const message = document.getElementById("message").value.trim();
+  const type = document.getElementById("type").value;
+
+  if (!message) return;
+
+  const logEntry = {
+    message,
+    type,
+    time: new Date().toLocaleString()
+  };
+
+  logs.push(logEntry);
+
+  // Console logging
+  if (type === "log") console.log(message);
+  if (type === "warn") console.warn(message);
+  if (type === "error") console.error(message);
+
+  displayLogs();
+  document.getElementById("message").value = "";
+}
+
+// Display logs
+function displayLogs() {
+  const container = document.getElementById("logs");
+  container.innerHTML = "";
+
+  logs.forEach(log => {
+    const div = document.createElement("div");
+    div.className = `log ${log.type}`;
+    div.innerHTML = `
+      <strong>${log.type.toUpperCase()}</strong> - ${log.message}<br>
+      <small>${log.time}</small>
+    `;
+    container.appendChild(div);
+  });
+}
+</script>
+
+</body>
+</html>

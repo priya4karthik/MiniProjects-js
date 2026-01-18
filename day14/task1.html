@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Typing Speed Tester</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    h1 { color: #333; }
+    #sentence { font-size: 20px; margin-bottom: 20px; }
+    #input { width: 100%; padding: 10px; font-size: 18px; }
+    #result { margin-top: 20px; font-size: 18px; font-weight: bold; }
+    button { padding: 10px 20px; font-size: 16px; margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <h1>Typing Speed Tester</h1>
+  <div id="sentence">Click "Start Test" to fetch a sentence...</div>
+  <textarea id="input" rows="4" disabled></textarea><br>
+  <button id="start">Start Test</button>
+  <div id="result"></div>
+
+  <script>
+    let startTime, endTime, sentence;
+
+    const startBtn = document.getElementById("start");
+    const inputBox = document.getElementById("input");
+    const sentenceBox = document.getElementById("sentence");
+    const resultBox = document.getElementById("result");
+
+    // Start button click
+    startBtn.addEventListener("click", async () => {
+      try {
+        const res = await fetch("https://api.quotable.io/random");
+        const data = await res.json();
+        sentence = data.content; // sentence from API
+      } catch (err) {
+        // Fallback sentence if API fails
+        sentence = "The quick brown fox jumps over the lazy dog.";
+      }
+
+      // Reset UI
+      sentenceBox.textContent = sentence;
+      inputBox.value = "";
+      inputBox.disabled = false;   // enable typing
+      inputBox.focus();            // auto-focus
+      resultBox.textContent = "";
+      startTime = null;
+    });
+
+    // Typing event
+    // inputBox.addEventListener("input", () => {
+    //   if (!startTime) startTime = new Date(); // start timer on first keystroke
+
+    //   if (inputBox.value === sentence) {
+    //     endTime = new Date();
+    //     const timeTaken = (endTime - startTime) / 1000; // seconds
+    //     const words = sentence.split(" ").length;
+    //     const minutes = timeTaken / 60;
+    //     const wpm = Math.round(words / minutes);
+
+    //     resultBox.textContent =
+    //       `✅ Completed! Typing Speed: ${wpm} WPM (Time: ${timeTaken.toFixed(1)}s)`;
+    //     inputBox.disabled = true; // lock input after completion
+    //   }
+    // });
+    inputBox.addEventListener("input", () => {
+  if (!startTime) startTime = new Date(); // start timer on first keystroke
+
+  // Check if user finished typing (length matches)
+  if (inputBox.value.length >= sentence.length) {
+    endTime = new Date();
+    const timeTaken = (endTime - startTime) / 1000; // seconds
+    const words = sentence.split(" ").length;
+    const minutes = timeTaken / 60;
+    const wpm = Math.round(words / minutes);
+
+    // Accuracy check
+    let correctChars = 0;
+    for (let i = 0; i < sentence.length; i++) {
+      if (inputBox.value[i] === sentence[i]) correctChars++;
+    }
+    const accuracy = Math.round((correctChars / sentence.length) * 100);
+
+    resultBox.textContent =
+      `✅ Completed! Typing Speed: ${wpm} WPM (Time: ${timeTaken.toFixed(1)}s, Accuracy: ${accuracy}%)`;
+    inputBox.disabled = true;
+  }
+});
+
+  </script>
+</body>
+</html>
